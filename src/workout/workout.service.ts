@@ -29,23 +29,38 @@ export class WorkoutService {
             return result.id;
     }
 
-    async getWorkouts(){
-        const exercises = await this.workoutModel.find().exec();
-        return exercises.map((ex) => ({id: ex.id, name: ex.name,}));
-    }
-    async getOneExercise(exerciseId: string){
-        const exercise = await this.findExercise(exerciseId);
-        return {id: exercise.id, name: exercise.name,};
-    }
-    async findExercise(id: string): Promise <Exercise>{
-        let exercise;
-        try{
-            exercise = await this.workoutModel.findById(id);
-        } catch (error){
-            throw new NotFoundException("Could not find exercise");
+    async getWorkouts(uname : string, wdate: Date){
+        const workouts = await this.workoutModel.find().exec();
+        let finedWorkout = [];
+        for (let x of workouts){
+            if(x.username === uname && x.workoutDate.getTime() === new Date(wdate).getTime()){
+                finedWorkout.push(x);
+            }
         }
-        return exercise;
-    }
+        return finedWorkout.map((wo) => ({
+            id: wo.id,
+            name: wo.exerciseName,
+            username: wo.username,
+            series: wo.series,
+            reps: wo.repetitions,
+            weight: wo.weight,
+            workoutDate: wo.workoutDate,
+        }));
+        
+    }////
+    // async getOneE(exerciseId: string){
+    //     const exercise = await this.findWorkout();
+    //     return {id: exercise.id, name: exercise.name,};
+    // }
+    // async findWorkout(){
+    //     const workouts = await this.workoutModel.find().exec();
+    //     for (let x of workouts){
+    //         console.log(x);
+    //     }
+
+
+    //     return workouts;
+    // }
     
     // async updateExercise(exerciseId: string, exerciseName: string) {
     //     const updatedExercise = await this.findExercise(exerciseId);
@@ -55,10 +70,10 @@ export class WorkoutService {
     //     updatedExercise.save();
     // }
 
-    async deleteExercise(exerciseId: string) {
-        const result = await this.workoutModel.deleteOne({_id: exerciseId}).exec();
-        if (result.n === 0){
-            throw new NotFoundException('Could not find');
-        }
-    }
+    // async deleteExercise(exerciseId: string) {
+    //     const result = await this.workoutModel.deleteOne({_id: exerciseId}).exec();
+    //     if (result.n === 0){
+    //         throw new NotFoundException('Could not find');
+    //     }
+    // }
 }
