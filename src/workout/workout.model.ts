@@ -6,7 +6,7 @@ export const WorkoutSchema = new mongoose.Schema({
     username: {type: String, required: true },
     series: {type: Number, required: true },
     repetitions: {type: Number, required: true },
-    weight: { type: Number, required: true },
+    weight: { type: Number, required: false },
     workoutDate: {type: Date, required: true },
 
 }) 

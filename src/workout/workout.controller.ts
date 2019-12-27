@@ -3,7 +3,7 @@ import { WorkoutService } from "./workout.service";
 
 @Controller('workout')
 export class WorkoutController {
-    constructor(private readonly exercisesService: WorkoutService) { }
+    constructor(private readonly workoutService: WorkoutService) { }
 
     @Post()
     async addWorkout(
@@ -14,13 +14,13 @@ export class WorkoutController {
         @Body('weight') weight: number,
         @Body('workoutDate') workoutDate: Date
     ) {
-        const generatedId = await this.exercisesService.insertWorkout(exerciseName,username, series, reps, weight, workoutDate);
+        const generatedId = await this.workoutService.insertWorkout(exerciseName,username, series, reps, weight, workoutDate);
         return { id: generatedId };
     }
     @Get()
     async getWorkouts(@Body('username') username: string,
                       @Body('workoutDate') workoutDate: Date) {
-        const workouts = await this.exercisesService.getWorkouts(username, workoutDate);
+        const workouts = await this.workoutService.getWorkouts(username, workoutDate);
         return workouts;
     }
 
@@ -37,9 +37,9 @@ export class WorkoutController {
     //         await this.exercisesService.updateExercise(exerciseId, exerciseName);
     //         return null;
     //     }
-    // @Delete(':id')
-    // async removeExercise(@Param('id') exerciseId: string,){
-    //     await this.exercisesService.deleteExercise(exerciseId);
-    //     return null;
-    // }
+    @Delete(':id')
+    async removeWorkout(@Param('id') workoutId: string,){
+        await this.workoutService.deleteWorkoutSeries(workoutId);
+        return null;
+    }
 }

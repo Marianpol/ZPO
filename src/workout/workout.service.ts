@@ -70,10 +70,10 @@ export class WorkoutService {
     //     updatedExercise.save();
     // }
 
-    // async deleteExercise(exerciseId: string) {
-    //     const result = await this.workoutModel.deleteOne({_id: exerciseId}).exec();
-    //     if (result.n === 0){
-    //         throw new NotFoundException('Could not find');
-    //     }
-    // }
+    async deleteWorkoutSeries(workoutId: string) {
+        const result = await this.workoutModel.deleteOne({_id: workoutId}).exec();
+        if (result.n === 0){
+            throw new NotFoundException('Could not find');
+        }
+    }
 }
