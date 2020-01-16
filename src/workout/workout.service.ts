@@ -10,42 +10,53 @@ export class WorkoutService {
     constructor(@InjectModel('Workout') private readonly workoutModel: Model<Workout>){}
 
     async insertWorkout(
+        planId: string,
         exerciseName: string,
-        username: string,
+        // username: string,
         series: number,
         reps: number,
         weight: number,
-        workoutDate: Date
+        // workoutDate: Date
         ){
             const newWorkout = new this.workoutModel({
+                planId,
                 exerciseName,
-                username,
+                // username,
                 series,
                 repetitions: reps,
                 weight,
-                workoutDate,
+                // workoutDate,
             });
             const result = await newWorkout.save();
             return result.id;
     }
 
-    async getWorkouts(uname : string, wdate: Date){
+    async getWorkouts(){
         const workouts = await this.workoutModel.find().exec();
-        let finedWorkout = [];
-        for (let x of workouts){
-            if(x.username === uname && x.workoutDate.getTime() === new Date(wdate).getTime()){
-                finedWorkout.push(x);
-            }
-        }
-        return finedWorkout.map((wo) => ({
-            id: wo.id,
-            name: wo.exerciseName,
-            username: wo.username,
-            series: wo.series,
-            reps: wo.repetitions,
-            weight: wo.weight,
-            workoutDate: wo.workoutDate,
-        }));
+        // let finedWorkout = [];
+        // for (let x of workouts){
+        //     if(x.username === uname && x.workoutDate.getTime() === new Date(wdate).getTime()){
+        //         finedWorkout.push(x);
+        //     }
+        // }
+        return workouts.map((item) => ({
+            id: item.planId,
+            name: item.exerciseName,
+            // username: item.username,
+            series: item.series,
+            reps: item.repetitions,
+            weight: item.weight,
+            // workoutDate: item.workoutDate,
+        }))
+        // return finedWorkout.map((wo) => ({
+        //     id: wo.id,
+        //     name: wo.exerciseName,
+        //     username: wo.username,
+        //     series: wo.series,
+        //     reps: wo.repetitions,
+        //     weight: wo.weight,
+        //     workoutDate: wo.workoutDate,
+        // }));
         
     }////
     // async getOneE(exerciseId: string){

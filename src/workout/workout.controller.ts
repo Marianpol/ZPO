@@ -7,22 +7,23 @@ export class WorkoutController {
 
     @Post()
     async addWorkout(
+        @Body('pid') planId : string,
         @Body('name') exerciseName: string,
-        @Body('username') username: string,
+        // @Body('username') username: string,
         @Body('series') series: number,
         @Body('repetitions') reps: number,
         @Body('weight') weight: number,
-        @Body('workoutDate') workoutDate: Date
+        // @Body('workoutDate') workoutDate: Date
     ) {
-        const generatedId = await this.workoutService.insertWorkout(exerciseName,username, series, reps, weight, workoutDate);
+        const generatedId = await this.workoutService.insertWorkout(planId,exerciseName,series, reps, weight);
         return { id: generatedId };
     }
     @Get()
-    async getWorkouts(@Body('username') username: string,
-                      @Body('workoutDate') workoutDate: Date) {
-        const workouts = await this.workoutService.getWorkouts(username, workoutDate);
-        return workouts;
+    async getWorkouts() {
+        const users = await this.workoutService.getWorkouts();
+        return users;
     }
+    // }
 
     // @Get(':id')
     // getExercise(@Param('id') exerciseId: string, ) {
@@ -37,9 +38,9 @@ export class WorkoutController {
     //         await this.exercisesService.updateExercise(exerciseId, exerciseName);
     //         return null;
     //     }
-    @Delete(':id')
-    async removeWorkout(@Param('id') workoutId: string,){
-        await this.workoutService.deleteWorkoutSeries(workoutId);
-        return null;
-    }
+    // @Delete(':id')
+    // async removeWorkout(@Param('id') workoutId: string,){
+    //     await this.workoutService.deleteWorkoutSeries(workoutId);
+    //     return null;
+    // }
 }

@@ -9,9 +9,9 @@ export class WorkoutPlanService {
 
     constructor(@InjectModel('WorkoutPlan') private readonly workoutPlanModel: Model<WorkoutPlan>){}
 
-    async insertWorkoutPlan(name: string, exname: string){
+    async insertWorkoutPlan(name: string){
         const newWorkoutPlan = new this.workoutPlanModel({
-            name, exerciseName: exname,
+            name,
         });
         const result = await newWorkoutPlan.save();
         return result.id;
@@ -19,7 +19,7 @@ export class WorkoutPlanService {
 
     async getWorkoutPlans(){
         const workoutPlans = await this.workoutPlanModel.find().exec();
-        return workoutPlans.map((wp) => ({id: wp.id, name: wp.name, exerciseName: wp.exerciseName,}));
+        return workoutPlans.map((wp) => ({id: wp.id, name: wp.name,}));
     }
     // async getWorkoutPlan(name: string){
     //     const workoutPlan = await this.findUser(userId);
@@ -35,10 +35,10 @@ export class WorkoutPlanService {
         return workoutPlanExe;
     }
     
-    async updateWorkoutPlanExercise(exId: string, exname: string) {
+    async updateWorkoutPlanExercise(exId: string, name: string) {
         const updatedWorkoutPlanExe = await this.findWorkoutPlanExercise(exId);
-        if (exname) {
-            updatedWorkoutPlanExe.exerciseName = exname;
+        if (name) {
+            updatedWorkoutPlanExe.name = name;
         }
         updatedWorkoutPlanExe.save();
     }
