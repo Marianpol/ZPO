@@ -19,7 +19,9 @@ export class ExerciseService {
 
     async getExercises(){
         const exercises = await this.exerciseModel.find().exec();
-        return exercises.map((ex) => ({id: ex.id, name: ex.name,}));
+        let exArray = [];
+        exercises.map((ex) => exArray.push(ex.name));
+        return exArray;
     }
     async getOneExercise(exerciseId: string){
         const exercise = await this.findExercise(exerciseId);
