@@ -5,31 +5,24 @@ import { WorkoutService} from "../workout/workout.service";
 @Controller('workoutplan')
 export class WorkoutPlanController {
     constructor(private readonly workoutPlanService: WorkoutPlanService) { }
-    private workoutService : WorkoutService;
+    // private workoutService : WorkoutService;
     
     @Post()
     async addWorkoutPlan(
         @Body('name') name: string,
         @Body('training') training: any[],
-    ) {
-        const generatedId = await this.workoutPlanService.insertWorkoutPlan(name);
-        for (let i = 0; i < training.map(({ series }: any) => series.length)[0]; i++) {
-            const trainingArray: any = training.map(({ id, name, series }: any, index: any) => ({
-              id,
-              name,
-              idSeries: series.map(({ id }: any) => id)[i],
-              kg: series.map(({ kg }: any) => kg)[i],
-              time: series.map(({ time }: any) => time)[i],
-              repeat: series.map(({ repeat }: any) => repeat)[i],
-            }));
-            this.workoutService.insertWorkout.call(this.workoutService,
-                generatedId,
-                trainingArray.name,
-                trainingArray.idSeries,
-                trainingArray.repeat,
-                trainingArray.kg,);
-          }
-        return { id: generatedId };
+    ) { 
+        for(let i = 0; i < training.length; i++){
+            for (let j = 0; j < training.map(({ series }: any) => series.length)[0]; j++) {
+                let tr = training[i]['series'][j];
+                this.workoutPlanService.insertWorkoutPlan(
+                    name,
+                    training[i]['name'],
+                    tr['id'],
+                    tr['repeat'],
+                    tr['kg'],);
+            }
+        }
     }
     @Get()
     async getWorkoutPlans() {
@@ -37,10 +30,17 @@ export class WorkoutPlanController {
         return workoutPlans;
     }
 
-    // @Get(':id')
-    // getUser(@Param('id') userId: string, ) {
-    //     return this.userService.getOneUser(userId);
-    // }
+    @Get(':pm')
+    async getUser(@Param('pm') param: string, ) {
+        let result = [];
+        if(param === "names"){
+            result = await this.workoutPlanService.getWrokoutPlansNames();
+        }
+        else{
+            result = await this.workoutPlanService.getWorkoutPlans();
+        }
+        return result;
+    }
 
     @Patch(':id')
     async updateWorkoutPlanExercise(

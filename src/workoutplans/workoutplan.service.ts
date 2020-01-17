@@ -9,9 +9,22 @@ export class WorkoutPlanService {
 
     constructor(@InjectModel('WorkoutPlan') private readonly workoutPlanModel: Model<WorkoutPlan>){}
 
-    async insertWorkoutPlan(name: string){
+    async insertWorkoutPlan(
+        name: string,
+        exerciseName: string,
+        // username: string,
+        series: number,
+        reps: number,
+        weight: number,
+        ){
         const newWorkoutPlan = new this.workoutPlanModel({
             name,
+            exerciseName,
+            // username,
+            series,
+            repetitions: reps,
+            weight,
+            // workoutDate,
         });
         const result = await newWorkoutPlan.save();
         return result.id;
@@ -19,7 +32,11 @@ export class WorkoutPlanService {
 
     async getWorkoutPlans(){
         const workoutPlans = await this.workoutPlanModel.find().exec();
-        return workoutPlans.map((wp) => ({id: wp.id, name: wp.name,}));
+        return workoutPlans.map((wp) => ({id: wp.id, name: wp.name, exerciseName: wp.exerciseName, series: wp.series, reps: wp.repetitions, weight:wp.weight }));
+    }
+    async getWrokoutPlansNames(){
+        const workoutPlans = await this.workoutPlanModel.find().exec();
+        return Array.from(new Set(workoutPlans.map((item: any) => item.name)));
     }
     // async getWorkoutPlan(name: string){
     //     const workoutPlan = await this.findUser(userId);
@@ -49,4 +66,5 @@ export class WorkoutPlanService {
             throw new NotFoundException('Could not find exercise in the plan');
         }
     }
+    
 }
