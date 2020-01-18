@@ -1,15 +1,13 @@
 import { Controller, Post, Body, Get, Param, Patch, Delete } from "@nestjs/common";
-import { WorkoutPlanService } from "./workoutplan.service";
+import { WorkoutPlanExampleService } from "./workoutplanexample.service";
 
-@Controller('workoutplan')
-export class WorkoutPlanController {
-    constructor(private readonly workoutPlanService: WorkoutPlanService) { }
+@Controller('workoutplanexample')
+export class WorkoutPlanExampleController {
+    constructor(private readonly workoutPlanService: WorkoutPlanExampleService) { }
     
     @Post()
     async addWorkoutPlan(
         @Body('name') name: string,
-        @Body('description') description: string,
-        @Body('img') img: string,
         @Body('training') training: any[],
     ) { 
         if(name){
@@ -18,8 +16,6 @@ export class WorkoutPlanController {
                     let tr = training[i]['series'][j];
                     this.workoutPlanService.insertWorkoutPlan(
                         name,
-                        description,
-                        img,
                         training[i]['name'],
                         tr['id'],
                         tr['repeat'],
@@ -35,11 +31,6 @@ export class WorkoutPlanController {
         }
         
     }
-    @Get()
-    async getWorkoutPlans() {
-        const workoutPlans = await this.workoutPlanService.getWorkoutPlans();
-        return workoutPlans;
-    }
 
     @Get(':pm')
     async getUser(@Param('pm') param: string,) {
@@ -50,17 +41,17 @@ export class WorkoutPlanController {
         return result;
     }
 
-    @Patch(':id')
-    async updateWorkoutPlanExercise(
-        @Param('id') planId: string, 
-        @Body('name') name: string,
-        ) {
-            await this.workoutPlanService.updateWorkoutPlanExercise(planId, name);
-            return null;
-        }
-    @Delete(':id')
-    async removeWorkoutPlanExercise(@Param('id') planId: string,){
-        await this.workoutPlanService.deleteWorkoutPlanExercise(planId);
-        return null;
-    }
+    // @Patch(':id')
+    // async updateWorkoutPlanExercise(
+    //     @Param('id') planId: string, 
+    //     @Body('name') name: string,
+    //     ) {
+    //         await this.workoutPlanService.updateWorkoutPlanExercise(planId, name);
+    //         return null;
+    //     }
+    // @Delete(':id')
+    // async removeWorkoutPlanExercise(@Param('id') planId: string,){
+    //     await this.workoutPlanService.deleteWorkoutPlanExercise(planId);
+    //     return null;
+    // }
 }

@@ -1,11 +1,9 @@
 import * as mongoose from 'mongoose'
 import { MongooseModule } from '@nestjs/mongoose'
-import { WorkoutSchema } from '../workout/workout.model'
 
-export const WorkoutPlanSchema = new mongoose.Schema({
+
+export const WorkoutPlanExampleSchema = new mongoose.Schema({
     name: { type: String, required: true },
-    description: {type: String, required: true },
-    img: {type: String, required: false },
     exerciseName : { type: String, required: true },
     // username: {type: String, required: true },
     series: {type: Number, required: true },
@@ -14,11 +12,9 @@ export const WorkoutPlanSchema = new mongoose.Schema({
     time: {type: Number, required: false },
     // workoutDate: {type: Date, required: true },
 })
-export interface WorkoutPlan extends mongoose.Document {
+export interface WorkoutPlanExample extends mongoose.Document {
     id: string;
     name: string;
-    description: string,
-    img: string,
     exerciseName: string;
     // username: string;
     series: number;
