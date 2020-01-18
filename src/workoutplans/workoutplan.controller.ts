@@ -10,18 +10,26 @@ export class WorkoutPlanController {
         @Body('name') name: string,
         @Body('training') training: any[],
     ) { 
-        for(let i = 0; i < training.length; i++){
-            for (let j = 0; j < training.map(({ series }: any) => series.length)[0]; j++) {
-                let tr = training[i]['series'][j];
-                this.workoutPlanService.insertWorkoutPlan(
-                    name,
-                    training[i]['name'],
-                    tr['id'],
-                    tr['repeat'],
-                    tr['kg'],
-                    tr['time'],);
+        if(name){
+            for(let i = 0; i < training.length; i++){
+                for (let j = 0; j < training.map(({ series }: any) => series.length)[0]; j++) {
+                    let tr = training[i]['series'][j];
+                    this.workoutPlanService.insertWorkoutPlan(
+                        name,
+                        training[i]['name'],
+                        tr['id'],
+                        tr['repeat'],
+                        tr['kg'],
+                        tr['time'],);
+                }
             }
         }
+        else{
+            let result = [];
+            result = await this.workoutPlanService.getWorkoutPlansBack();
+            return result;
+        }
+        
     }
     @Get()
     async getWorkoutPlans() {
@@ -30,14 +38,10 @@ export class WorkoutPlanController {
     }
 
     @Get(':pm')
-    async getUser(@Param('pm') param: string,
-                  @Body('name') name: string,) {
+    async getUser(@Param('pm') param: string,) {
         let result = [];
         if(param === "names"){
             result = await this.workoutPlanService.getWrokoutPlansNames();
-        }
-        else{
-            result = await this.workoutPlanService.getWorkoutPlansBack(name);
         }
         return result;
     }

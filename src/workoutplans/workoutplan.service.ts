@@ -55,42 +55,49 @@ export class WorkoutPlanService {
         return namesNumber;
     }
 
-    async getWorkoutPlansBack(name: string){
-        const workoutPlans = await this.workoutPlanModel.find({name: name});
-        let exercises = this.getWrokoutPlansExercisesNames(workoutPlans);
-        let exercisesAllNames = this.getWrokoutPlanSeries(workoutPlans);
-        let x = this.getSeriesNumber(exercises,exercisesAllNames);
-        let restoredPlan = {name:name}
-        let restoredExercise = {};
-        let restoredSeries = {};
-        let series = [];
-        let training = [];
-        let counter = 0;
+    async getWorkoutPlansBack(){
         let readyPlan = [];
-
-        for(let i = 0; i < x.length; i++){
-            restoredExercise['id'] = i;
-            restoredExercise['name'] = exercises[i];
-            for(let j = counter; j < counter + x[i] ; j++){
-                restoredSeries['id'] = workoutPlans[j].series;
-                restoredSeries['repeat'] = workoutPlans[j].repetitions;
-                if(workoutPlans[j].weight){
-                    restoredSeries['kg'] = workoutPlans[j].weight;
+        let workoutPlans = await this.workoutPlanModel.find().exec();
+        let workoutPlanNames = Array.from(new Set(workoutPlans.map((item: any) => item.name)));
+        workoutPlans = [];
+        for (let workoutName of workoutPlanNames){
+            let selectedWorkoutPlan = await this.workoutPlanModel.find({name: workoutName})
+            let exercises = this.getWrokoutPlansExercisesNames(selectedWorkoutPlan);
+            let exercisesAllNames = this.getWrokoutPlanSeries(selectedWorkoutPlan);
+            let x = this.getSeriesNumber(exercises,exercisesAllNames);
+            let restoredPlan = {};
+            let restoredExercise = {};
+            let restoredSeries = {};
+            let series = [];
+            let training = [];
+            let counter = 0;
+            
+            restoredPlan['name'] = workoutName;
+            for(let i = 0; i < x.length; i++){
+                restoredExercise['id'] = i;
+                restoredExercise['name'] = exercises[i];
+                for(let j = counter; j < counter + x[i] ; j++){
+                    restoredSeries['id'] = selectedWorkoutPlan[j].series;
+                    restoredSeries['repeat'] = selectedWorkoutPlan[j].repetitions;
+                    if(selectedWorkoutPlan[j].weight){
+                        restoredSeries['kg'] = selectedWorkoutPlan[j].weight;
+                    }
+                    else{
+                        restoredSeries['time'] = selectedWorkoutPlan[j].time;
+                    }
+                    series.push(restoredSeries);
+                    restoredSeries = {};
                 }
-                else{
-                    restoredSeries['time'] = workoutPlans[j].time;
-                }
-                series.push(restoredSeries);
-                restoredSeries = {};
+                counter += x[i];
+                restoredExercise['series'] = series;
+                series = [];
+                training.push(restoredExercise);
+                restoredExercise = {};
             }
-            counter += x[i];
-            restoredExercise['series'] = series;
-            series = [];
-            training.push(restoredExercise);
-            restoredExercise = {};
+            restoredPlan['training'] = training;
+            readyPlan.push(restoredPlan);
+            restoredPlan = {};
         }
-        restoredPlan['training'] = training;
-        readyPlan.push(restoredPlan);
         return readyPlan;
     }
 
