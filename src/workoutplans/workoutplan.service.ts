@@ -16,6 +16,7 @@ export class WorkoutPlanService {
         series: number,
         reps: number,
         weight: number,
+        time: number,
         ){
         const newWorkoutPlan = new this.workoutPlanModel({
             name,
@@ -24,6 +25,7 @@ export class WorkoutPlanService {
             series,
             repetitions: reps,
             weight,
+            time,
             // workoutDate,
         });
         const result = await newWorkoutPlan.save();
@@ -32,11 +34,16 @@ export class WorkoutPlanService {
 
     async getWorkoutPlans(){
         const workoutPlans = await this.workoutPlanModel.find().exec();
-        return workoutPlans.map((wp) => ({id: wp.id, name: wp.name, exerciseName: wp.exerciseName, series: wp.series, reps: wp.repetitions, weight:wp.weight }));
+        return workoutPlans.map((wp) => ({id: wp.id, name: wp.name, exerciseName: wp.exerciseName, series: wp.series, reps: wp.repetitions, weight:wp.weight, time: wp.time, }));
     }
     async getWrokoutPlansNames(){
         const workoutPlans = await this.workoutPlanModel.find().exec();
         return Array.from(new Set(workoutPlans.map((item: any) => item.name)));
+    }
+
+    async getWorkoutPlansBack(name: string){
+        const workoutPlans = await this.workoutPlanModel.find({name: name});
+        return workoutPlans;
     }
     // async getWorkoutPlan(name: string){
     //     const workoutPlan = await this.findUser(userId);

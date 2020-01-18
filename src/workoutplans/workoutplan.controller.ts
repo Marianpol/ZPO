@@ -1,11 +1,9 @@
 import { Controller, Post, Body, Get, Param, Patch, Delete } from "@nestjs/common";
 import { WorkoutPlanService } from "./workoutplan.service";
-import { WorkoutService} from "../workout/workout.service";
 
 @Controller('workoutplan')
 export class WorkoutPlanController {
     constructor(private readonly workoutPlanService: WorkoutPlanService) { }
-    // private workoutService : WorkoutService;
     
     @Post()
     async addWorkoutPlan(
@@ -20,7 +18,8 @@ export class WorkoutPlanController {
                     training[i]['name'],
                     tr['id'],
                     tr['repeat'],
-                    tr['kg'],);
+                    tr['kg'],
+                    tr['time'],);
             }
         }
     }
@@ -31,13 +30,14 @@ export class WorkoutPlanController {
     }
 
     @Get(':pm')
-    async getUser(@Param('pm') param: string, ) {
+    async getUser(@Param('pm') param: string,
+                  @Body('name') name: string,) {
         let result = [];
         if(param === "names"){
             result = await this.workoutPlanService.getWrokoutPlansNames();
         }
         else{
-            result = await this.workoutPlanService.getWorkoutPlans();
+            result = await this.workoutPlanService.getWorkoutPlansBack(name);
         }
         return result;
     }
