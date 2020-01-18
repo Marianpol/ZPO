@@ -11,6 +11,8 @@ export class WorkoutPlanExampleService {
 
     async insertWorkoutPlan(
         name: string,
+        description: string,
+        img: string,
         exerciseName: string,
         // username: string,
         series: number,
@@ -20,6 +22,8 @@ export class WorkoutPlanExampleService {
         ){
         const newWorkoutPlan = new this.workoutPlanExampleModel({
             name,
+            description,
+            img,
             exerciseName,
             // username,
             series,
@@ -54,9 +58,11 @@ export class WorkoutPlanExampleService {
         let readyPlan = [];
         let workoutPlans = await this.workoutPlanExampleModel.find().exec();
         let workoutPlanNames = Array.from(new Set(workoutPlans.map((item: any) => item.name)));
+        let workoutPlanDesc = Array.from(new Set(workoutPlans.map((item: any) => item.description)));
+        let workoutPlanimg = Array.from(new Set(workoutPlans.map((item: any) => item.img)));
         workoutPlans = [];
-        for (let workoutName of workoutPlanNames){
-            let selectedWorkoutPlan = await this.workoutPlanExampleModel.find({name: workoutName})
+        for (let wp = 0; wp < workoutPlanNames.length; wp++){
+            let selectedWorkoutPlan = await this.workoutPlanExampleModel.find({name: workoutPlanNames[wp]})
             let exercises = this.getWrokoutPlansExercisesNames(selectedWorkoutPlan);
             let exercisesAllNames = this.getWrokoutPlanSeries(selectedWorkoutPlan);
             let x = this.getSeriesNumber(exercises,exercisesAllNames);
@@ -68,7 +74,9 @@ export class WorkoutPlanExampleService {
             let counter = 0;
             
             restoredPlan['id'] = counter;
-            restoredPlan['name'] = workoutName;
+            restoredPlan['name'] = workoutPlanNames[wp];
+            restoredPlan['description'] = workoutPlanDesc[wp];
+            restoredPlan['img'] = workoutPlanimg[wp];
             for(let i = 0; i < x.length; i++){
                 restoredExercise['id'] = i;
                 restoredExercise['name'] = exercises[i];

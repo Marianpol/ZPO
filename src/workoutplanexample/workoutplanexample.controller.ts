@@ -8,6 +8,8 @@ export class WorkoutPlanExampleController {
     @Post()
     async addWorkoutPlan(
         @Body('name') name: string,
+        @Body('description') description: string,
+        @Body('img') img: string,
         @Body('training') training: any[],
     ) { 
         if(name){
@@ -16,6 +18,8 @@ export class WorkoutPlanExampleController {
                     let tr = training[i]['series'][j];
                     this.workoutPlanService.insertWorkoutPlan(
                         name,
+                        description,
+                        img,
                         training[i]['name'],
                         tr['id'],
                         tr['repeat'],

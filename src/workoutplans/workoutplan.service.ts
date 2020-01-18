@@ -11,8 +11,6 @@ export class WorkoutPlanService {
 
     async insertWorkoutPlan(
         name: string,
-        description: string,
-        img: string,
         exerciseName: string,
         // username: string,
         series: number,
@@ -22,8 +20,6 @@ export class WorkoutPlanService {
         ){
         const newWorkoutPlan = new this.workoutPlanModel({
             name,
-            description,
-            img,
             exerciseName,
             // username,
             series,
@@ -36,10 +32,10 @@ export class WorkoutPlanService {
         return result.id;
     }
 
-    async getWorkoutPlans(){
-        const workoutPlans = await this.workoutPlanModel.find().exec();
-        return workoutPlans.map((wp) => ({id: wp.id, name: wp.name, exerciseName: wp.exerciseName, series: wp.series, reps: wp.repetitions, weight:wp.weight, time: wp.time, }));
-    }
+    // async getWorkoutPlans(){
+    //     const workoutPlans = await this.workoutPlanModel.find().exec();
+    //     return workoutPlans.map((wp) => ({id: wp.id, name: wp.name, exerciseName: wp.exerciseName, series: wp.series, reps: wp.repetitions, weight:wp.weight, time: wp.time, }));
+    // }
     async getWrokoutPlansNames(){
         const workoutPlans = await this.workoutPlanModel.find().exec();
         return Array.from(new Set(workoutPlans.map((item: any) => item.name)));
@@ -62,11 +58,9 @@ export class WorkoutPlanService {
         let readyPlan = [];
         let workoutPlans = await this.workoutPlanModel.find().exec();
         let workoutPlanNames = Array.from(new Set(workoutPlans.map((item: any) => item.name)));
-        let workoutPlanDesc = Array.from(new Set(workoutPlans.map((item: any) => item.description)));
-        let workoutPlanimg = Array.from(new Set(workoutPlans.map((item: any) => item.img)));
         workoutPlans = [];
-        for (let wp = 0; wp < workoutPlanNames.length; wp++){
-            let selectedWorkoutPlan = await this.workoutPlanModel.find({name: workoutPlanNames[wp]})
+        for (let workoutName of workoutPlanNames){
+            let selectedWorkoutPlan = await this.workoutPlanModel.find({name: workoutName})
             let exercises = this.getWrokoutPlansExercisesNames(selectedWorkoutPlan);
             let exercisesAllNames = this.getWrokoutPlanSeries(selectedWorkoutPlan);
             let x = this.getSeriesNumber(exercises,exercisesAllNames);
@@ -78,9 +72,7 @@ export class WorkoutPlanService {
             let counter = 0;
             
             restoredPlan['id'] = counter;
-            restoredPlan['name'] = workoutPlanNames[wp];
-            restoredPlan['description'] = workoutPlanDesc[wp];
-            restoredPlan['img'] = workoutPlanimg[wp];
+            restoredPlan['name'] = workoutName;
             for(let i = 0; i < x.length; i++){
                 restoredExercise['id'] = i;
                 restoredExercise['name'] = exercises[i];

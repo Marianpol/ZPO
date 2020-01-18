@@ -8,8 +8,6 @@ export class WorkoutPlanController {
     @Post()
     async addWorkoutPlan(
         @Body('name') name: string,
-        @Body('description') description: string,
-        @Body('img') img: string,
         @Body('training') training: any[],
     ) { 
         if(name){
@@ -18,8 +16,6 @@ export class WorkoutPlanController {
                     let tr = training[i]['series'][j];
                     this.workoutPlanService.insertWorkoutPlan(
                         name,
-                        description,
-                        img,
                         training[i]['name'],
                         tr['id'],
                         tr['repeat'],
@@ -35,11 +31,11 @@ export class WorkoutPlanController {
         }
         
     }
-    @Get()
-    async getWorkoutPlans() {
-        const workoutPlans = await this.workoutPlanService.getWorkoutPlans();
-        return workoutPlans;
-    }
+    // @Get()
+    // async getWorkoutPlans() {
+    //     const workoutPlans = await this.workoutPlanService.getWorkoutPlans();
+    //     return workoutPlans;
+    // }
 
     @Get(':pm')
     async getUser(@Param('pm') param: string,) {
