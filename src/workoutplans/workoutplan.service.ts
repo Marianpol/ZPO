@@ -79,12 +79,8 @@ export class WorkoutPlanService {
                 for(let j = counter; j < counter + x[i] ; j++){
                     restoredSeries['id'] = selectedWorkoutPlan[j].series;
                     restoredSeries['repeat'] = selectedWorkoutPlan[j].repetitions;
-                    if(selectedWorkoutPlan[j].weight){
-                        restoredSeries['kg'] = selectedWorkoutPlan[j].weight;
-                    }
-                    else{
-                        restoredSeries['time'] = selectedWorkoutPlan[j].time;
-                    }
+                    restoredSeries['kg'] = selectedWorkoutPlan[j].weight;
+                    restoredSeries['time'] = selectedWorkoutPlan[j].time;
                     series.push(restoredSeries);
                     restoredSeries = {};
                 }
