@@ -72,6 +72,7 @@ export class WorkoutPlanService {
             let training = [];
             let counter = 0;
             
+            restoredPlan['id'] = counter;
             restoredPlan['name'] = workoutName;
             for(let i = 0; i < x.length; i++){
                 restoredExercise['id'] = i;
