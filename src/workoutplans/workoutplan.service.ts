@@ -2,6 +2,7 @@ import { Injectable, NotFoundException } from "@nestjs/common";
 import { WorkoutPlan } from "./workoutplan.model";
 import { InjectModel  } from "@nestjs/mongoose";
 import { Model } from 'mongoose';
+import { WorkoutModule } from "src/workout/workout.module";
 
 @Injectable()
 export class WorkoutPlanService {
@@ -40,15 +41,59 @@ export class WorkoutPlanService {
         const workoutPlans = await this.workoutPlanModel.find().exec();
         return Array.from(new Set(workoutPlans.map((item: any) => item.name)));
     }
+    getWrokoutPlansExercisesNames(workoutPlans: any[]){
+        return Array.from(new Set(workoutPlans.map((item: any) => item.exerciseName)));
+    }
+    getWrokoutPlanSeries(workoutPlans: any[]){
+        return workoutPlans.map((item: any) => item.exerciseName);   
+    }
+    getSeriesNumber(exercises: any[], exercisesNames: any[]){
+        let namesNumber = []
+        for(let elem of exercises){
+            namesNumber.push(exercisesNames.filter(c => c === elem).length);
+        }
+        return namesNumber;
+    }
 
     async getWorkoutPlansBack(name: string){
         const workoutPlans = await this.workoutPlanModel.find({name: name});
-        return workoutPlans;
+        let exercises = this.getWrokoutPlansExercisesNames(workoutPlans);
+        let exercisesAllNames = this.getWrokoutPlanSeries(workoutPlans);
+        let x = this.getSeriesNumber(exercises,exercisesAllNames);
+        let restoredPlan = {name:name}
+        let restoredExercise = {};
+        let restoredSeries = {};
+        let series = [];
+        let training = [];
+        let counter = 0;
+        let readyPlan = [];
+
+        for(let i = 0; i < x.length; i++){
+            restoredExercise['id'] = i;
+            restoredExercise['name'] = exercises[i];
+            for(let j = counter; j < counter + x[i] ; j++){
+                restoredSeries['id'] = workoutPlans[j].series;
+                restoredSeries['repeat'] = workoutPlans[j].repetitions;
+                if(workoutPlans[j].weight){
+                    restoredSeries['kg'] = workoutPlans[j].weight;
+                }
+                else{
+                    restoredSeries['time'] = workoutPlans[j].time;
+                }
+                series.push(restoredSeries);
+                restoredSeries = {};
+            }
+            counter += x[i];
+            restoredExercise['series'] = series;
+            series = [];
+            training.push(restoredExercise);
+            restoredExercise = {};
+        }
+        restoredPlan['training'] = training;
+        readyPlan.push(restoredPlan);
+        return readyPlan;
     }
-    // async getWorkoutPlan(name: string){
-    //     const workoutPlan = await this.findUser(userId);
-    //     return {id: user.id, username: user.username, pass: user.password, email: user.email,};
-    // }
+
     async findWorkoutPlanExercise(id: string): Promise <WorkoutPlan>{
         let workoutPlanExe;
         try{
