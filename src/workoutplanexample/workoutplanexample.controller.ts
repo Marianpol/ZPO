@@ -36,7 +36,7 @@ export class WorkoutPlanExampleController {
         }
         else{
             let result = [];
-            result.push(this.workoutPlanService.getPlansByTypes(await this.workoutPlanService.getWorkoutPlansBack()));
+            result = await this.workoutPlanService.getWorkoutPlansBack()));
             return result;
         } 
     }
