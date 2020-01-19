@@ -1,4 +1,4 @@
-import { Controller, Post, Body} from "@nestjs/common";
+import { Controller, Post, Body, Get} from "@nestjs/common";
 import { WorkoutPlanExampleService } from "./workoutplanexample.service";
 
 @Controller('workoutplanexample')
@@ -8,6 +8,7 @@ export class WorkoutPlanExampleController {
     @Post()
     async addWorkoutPlan(
         @Body('name') name: string,
+        @Body('group') planType: string,
         @Body('description') description: string,
         @Body('img') img: string,
         @Body('training') training: any[],
@@ -22,6 +23,7 @@ export class WorkoutPlanExampleController {
                     let tr = training[i]['series'][j];
                     this.workoutPlanService.insertWorkoutPlan(
                         name,
+                        planType,
                         description,
                         img,
                         training[i]['name'],
@@ -34,7 +36,7 @@ export class WorkoutPlanExampleController {
         }
         else{
             let result = [];
-            result = await this.workoutPlanService.getWorkoutPlansBack();
+            result.push(this.workoutPlanService.getPlansByTypes(await this.workoutPlanService.getWorkoutPlansBack()));
             return result;
         } 
     }

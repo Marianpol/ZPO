@@ -11,6 +11,7 @@ export class WorkoutPlanExampleService {
 
     async insertWorkoutPlan(
         name: string,
+        planType: string,
         description: string,
         img: string,
         exerciseName: string,
@@ -22,6 +23,7 @@ export class WorkoutPlanExampleService {
         ){
         const newWorkoutPlan = new this.workoutPlanExampleModel({
             name,
+            planType,
             description,
             img,
             exerciseName,
@@ -57,6 +59,7 @@ export class WorkoutPlanExampleService {
         let readyPlan = [];
         let workoutPlans = await this.workoutPlanExampleModel.find().exec();
         let workoutPlanNames = Array.from(new Set(workoutPlans.map((item: any) => item.name)));
+        let workoutPlanType = Array.from(new Set(workoutPlans.map((item: any) => item.planType)));
         let workoutPlanDesc = Array.from(new Set(workoutPlans.map((item: any) => item.description)));
         let workoutPlanimg = Array.from(new Set(workoutPlans.map((item: any) => item.img)));
         workoutPlans = [];
@@ -74,6 +77,7 @@ export class WorkoutPlanExampleService {
             
             restoredPlan['id'] = counter;
             restoredPlan['name'] = workoutPlanNames[wp];
+            restoredPlan['planType'] = workoutPlanType[wp];
             restoredPlan['description'] = workoutPlanDesc[wp];
             restoredPlan['img'] = workoutPlanimg[wp];
             for(let i = 0; i < x.length; i++){
@@ -98,6 +102,20 @@ export class WorkoutPlanExampleService {
             restoredPlan = {};
         }
         return readyPlan;
+    }
+
+    async getPlansByTypes(plansList: any[]){
+        let mapInfo = {};
+        plansList.forEach(function(elem) {
+            if(elem['planType'] in mapInfo){
+                mapInfo[elem['planType']].push(elem);
+            }
+            else{
+                mapInfo[elem['planType']] = [];
+                mapInfo[elem['planType']].push(elem);
+            }
+        })
+        return mapInfo;
     }
 
     async deleteAll(){

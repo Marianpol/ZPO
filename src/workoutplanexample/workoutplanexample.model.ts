@@ -4,6 +4,7 @@ import { MongooseModule } from '@nestjs/mongoose'
 
 export const WorkoutPlanExampleSchema = new mongoose.Schema({
     name: { type: String, required: true },
+    planType: { type: String, required: false },
     description: {type: String, required: true },
     img: {type: String, required: false },
     exerciseName : { type: String, required: true },
@@ -16,6 +17,7 @@ export const WorkoutPlanExampleSchema = new mongoose.Schema({
 export interface WorkoutPlanExample extends mongoose.Document {
     id: string;
     name: string;
+    planType: string;
     description: string,
     img: string,
     exerciseName: string;
