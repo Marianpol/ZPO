@@ -45,35 +45,12 @@ export class WorkoutPlanController {
             let exercisesList = await this.workoutService.getWorkouts();
             result = await this.workoutPlanService.getWorkoutPlansBack(exercisesList);
             return result;
-        }
-        
+        }  
     }
+    
     @Get()
     async getWorkoutPlans() {
         const workoutPlans = await this.workoutPlanService.getWorkoutPlans();
         return workoutPlans;
     }
-
-    @Get(':pm')
-    async getUser(@Param('pm') param: string,) {
-        let result = [];
-        if(param === "names"){
-            result = await this.workoutPlanService.getWrokoutPlansNames();
-        }
-        return result;
-    }
-
-    // @Patch(':id')
-    // async updateWorkoutPlanExercise(
-    //     @Param('id') planId: string, 
-    //     @Body('name') name: string,
-    //     ) {
-    //         await this.workoutPlanService.updateWorkoutPlanExercise(planId, name);
-    //         return null;
-    //     }
-    // @Delete(':id')
-    // async removeWorkoutPlanExercise(@Param('id') planId: string,){
-    //     await this.workoutPlanService.deleteWorkoutPlanExercise(planId);
-    //     return null;
-    // }
 }

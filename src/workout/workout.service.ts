@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from "@nestjs/common";
+import { Injectable} from "@nestjs/common";
 import { Workout } from "./workout.model";
 import { InjectModel } from "@nestjs/mongoose";
 import { Model } from 'mongoose';
@@ -17,7 +17,7 @@ export class WorkoutService {
         reps: number,
         weight: number,
         time: number,
-        // workoutDate: Date
+
         ){
             const newWorkout = new this.workoutModel({
                 planId,
@@ -27,7 +27,6 @@ export class WorkoutService {
                 repetitions: reps,
                 weight,
                 time,
-                // workoutDate,
             });
             const result = await newWorkout.save();
             return result.id;
@@ -35,50 +34,10 @@ export class WorkoutService {
 
     async getWorkouts(){
         const workouts = await this.workoutModel.find().exec();
-        return workouts;
-        // return workouts.map((item) => ({
-        //     idDB: item._id,
-        //     id: item.planId,
-        //     name: item.exerciseName,
-        //     // username: item.username,
-        //     series: item.series,
-        //     reps: item.repetitions,
-        //     weight: item.weight,
-        //     time: item.time,
-        //     // workoutDate: item.workoutDate,
-        // }))
-        
+        return workouts;   
     }
+
     async deleteAll(){
         await this.workoutModel.collection.drop();
     }
-
-    // async getOneE(exerciseId: string){
-    //     const exercise = await this.findWorkout();
-    //     return {id: exercise.id, name: exercise.name,};
-    // }
-    // async findWorkout(){
-    //     const workouts = await this.workoutModel.find().exec();
-    //     for (let x of workouts){
-    //         console.log(x);
-    //     }
-
-
-    //     return workouts;
-    // }
-    
-    // async updateExercise(exerciseId: string, exerciseName: string) {
-    //     const updatedExercise = await this.findExercise(exerciseId);
-    //     if (name) {
-    //         updatedExercise.name = name;
-    //     }
-    //     updatedExercise.save();
-    // }
-
-    // async deleteWorkoutSeries(workoutId: string) {
-    //     const result = await this.workoutModel.deleteOne({_id: workoutId}).exec();
-    //     if (result.n === 0){
-    //         throw new NotFoundException('Could not find');
-    //     }
-    // }
 }

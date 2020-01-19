@@ -12,7 +12,6 @@ export const WorkoutPlanExampleSchema = new mongoose.Schema({
     repetitions: {type: Number, required: true },
     weight: { type: Number, required: false },
     time: {type: Number, required: false },
-    // workoutDate: {type: Date, required: true },
 })
 export interface WorkoutPlanExample extends mongoose.Document {
     id: string;
@@ -25,6 +24,5 @@ export interface WorkoutPlanExample extends mongoose.Document {
     repetitions: number;
     weight: number;
     time: number,
-    // workoutDate: Date;
 }
 

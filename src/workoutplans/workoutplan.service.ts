@@ -24,10 +24,6 @@ export class WorkoutPlanService {
         return workoutPlans.map((wp) => ({id: wp.id, name: wp.name}));
     }
 
-    async getWrokoutPlansNames(){
-        const workoutPlans = await this.workoutPlanModel.find().exec();
-        return Array.from(new Set(workoutPlans.map((item: any) => item.name)));
-    }
     getWrokoutPlanExercisesNames(workoutPlans: any[]){
         return Array.from(new Set(workoutPlans.map((item: any) => item.exerciseName)));
     }
@@ -82,30 +78,6 @@ export class WorkoutPlanService {
         return readyPlan;
     }
 
-    async findWorkoutPlanExercise(id: string): Promise <WorkoutPlan>{
-        let workoutPlanExe;
-        try{
-            workoutPlanExe = await this.workoutPlanModel.findById(id);
-        } catch (error){
-            throw new NotFoundException("Could not find exercise in the plan");
-        }
-        return workoutPlanExe;
-    }
-    
-    async updateWorkoutPlanExercise(exId: string, name: string) {
-        const updatedWorkoutPlanExe = await this.findWorkoutPlanExercise(exId);
-        if (name) {
-            updatedWorkoutPlanExe.name = name;
-        }
-        updatedWorkoutPlanExe.save();
-    }
-
-    async deleteWorkoutPlanExercise(exId: string) {
-        const result = await this.workoutPlanModel.deleteOne({_id: exId}).exec();
-        if (result.n === 0){
-            throw new NotFoundException('Could not find exercise in the plan');
-        }
-    }
     async deleteAll(){
         await this.workoutPlanModel.collection.drop();
     }

@@ -42,50 +42,10 @@ export class UserWorkoutService {
 
     async getWorkouts(){
         const workouts = await this.userWorkoutModel.find().exec();
-        return workouts;
-        // return workouts.map((item) => ({
-        //     idDB: item._id,
-        //     id: item.planId,
-        //     name: item.exerciseName,
-        //     // username: item.username,
-        //     series: item.series,
-        //     reps: item.repetitions,
-        //     weight: item.weight,
-        //     time: item.time,
-        //     // workoutDate: item.workoutDate,
-        // }))
-        
+        return workouts;        
     }
+    
     async deleteAll(){
         await this.userWorkoutModel.collection.drop();
     }
-
-    // async getOneE(exerciseId: string){
-    //     const exercise = await this.findWorkout();
-    //     return {id: exercise.id, name: exercise.name,};
-    // }
-    // async findWorkout(){
-    //     const workouts = await this.userWorkoutModel.find().exec();
-    //     for (let x of workouts){
-    //         console.log(x);
-    //     }
-
-
-    //     return workouts;
-    // }
-    
-    // async updateExercise(exerciseId: string, exerciseName: string) {
-    //     const updatedExercise = await this.findExercise(exerciseId);
-    //     if (name) {
-    //         updatedExercise.name = name;
-    //     }
-    //     updatedExercise.save();
-    // }
-
-    // async deleteWorkoutSeries(workoutId: string) {
-    //     const result = await this.userWorkoutModel.deleteOne({_id: workoutId}).exec();
-    //     if (result.n === 0){
-    //         throw new NotFoundException('Could not find');
-    //     }
-    // }
 }

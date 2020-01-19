@@ -1,4 +1,4 @@
-import { Controller, Post, Body, Get, Param, Patch, Delete } from "@nestjs/common";
+import { Controller, Post, Body} from "@nestjs/common";
 import { WorkoutPlanExampleService } from "./workoutplanexample.service";
 
 @Controller('workoutplanexample')
@@ -38,27 +38,4 @@ export class WorkoutPlanExampleController {
             return result;
         } 
     }
-
-    @Get(':pm')
-    async getUser(@Param('pm') param: string,) {
-        let result = [];
-        if(param === "names"){
-            result = await this.workoutPlanService.getWrokoutPlansNames();
-        }
-        return result;
-    }
-
-    // @Patch(':id')
-    // async updateWorkoutPlanExercise(
-    //     @Param('id') planId: string, 
-    //     @Body('name') name: string,
-    //     ) {
-    //         await this.workoutPlanService.updateWorkoutPlanExercise(planId, name);
-    //         return null;
-    //     }
-    // @Delete(':id')
-    // async removeWorkoutPlanExercise(@Param('id') planId: string,){
-    //     await this.workoutPlanService.deleteWorkoutPlanExercise(planId);
-    //     return null;
-    // }
 }
