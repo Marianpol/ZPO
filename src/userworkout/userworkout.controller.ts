@@ -10,10 +10,4 @@ export class WorkoutController {
         const workouts = await this.workoutService.getWorkoutInfo();
         return workouts;
     }
-     
-    @Get(':pm')
-    async getAllDates() {
-        const workouts = await this.workoutService.getDates();
-        return workouts;
-    }
 }

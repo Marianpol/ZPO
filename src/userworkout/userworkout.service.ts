@@ -27,29 +27,22 @@ export class UserWorkoutService {
 
     async getWorkoutInfo(){
         const workouts = await this.userWorkoutModel.find().exec();
+        let dateAndTitle = {};
+        let dates = [];
         let mapInfo = {};
         workouts.forEach(function(elem) {
-            if(elem.workoutDate.getDate() in mapInfo){
-                mapInfo[elem.workoutDate.getDate()].push(elem.planName);
+            if(elem.workoutDate.getDate() in dateAndTitle){
+                dateAndTitle[elem.workoutDate.getDate()].push(elem.planName);
             }
             else{
-                mapInfo[elem.workoutDate.getDate()] = [];
-                mapInfo[elem.workoutDate.getDate()].push(elem.planName);
+                dateAndTitle[elem.workoutDate.getDate()] = [];
+                dateAndTitle[elem.workoutDate.getDate()].push(elem.planName);
             }
         })
-        return mapInfo;
-    }
-
-    async getDates(){
-        let dates = [];
-        const workouts = await this.userWorkoutModel.find().exec();
         workouts.forEach(item => dates.push(item.workoutDate));
-        return dates;
-    }
-
-    async getWorkouts(){
-        const workouts = await this.userWorkoutModel.find().exec();
-        return workouts;        
+        mapInfo['dates'] = dateAndTitle;
+        mapInfo['calendarDates'] = dates;
+        return mapInfo;
     }
     
     async deleteAll(){
