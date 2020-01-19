@@ -12,6 +12,10 @@ export class WorkoutPlanExampleController {
         @Body('img') img: string,
         @Body('training') training: any[],
     ) { 
+        if(name === "delete"){
+            await this.workoutPlanService.deleteAll();
+            return {message: "Deleted"};
+        }
         if(name){
             for(let i = 0; i < training.length; i++){
                 for (let j = 0; j < training.map(({ series }: any) => series.length)[0]; j++) {

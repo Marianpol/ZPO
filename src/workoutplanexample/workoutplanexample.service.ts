@@ -101,6 +101,10 @@ export class WorkoutPlanExampleService {
         return readyPlan;
     }
 
+    async deleteAll(){
+        await this.workoutPlanExampleModel.collection.drop();
+    }
+
     // async findWorkoutPlanExercise(id: string): Promise <WorkoutPlan>{
     //     let workoutPlanExe;
     //     try{

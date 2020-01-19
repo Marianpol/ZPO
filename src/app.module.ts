@@ -2,7 +2,6 @@ import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose'
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { ProductsModule } from './products/products.module';
 import { ExercisesModule } from './exercises/exercises.module';
 import { UserModule } from './users/user.module';
 import { WorkoutModule } from './workout/workout.module';
@@ -11,7 +10,7 @@ import { WorkoutPlanExampleModule} from './workoutplanexample/workoutplanexample
 import { UserWorkoutModule } from './userworkout/userworkout.module';
 
 @Module({
-  imports: [ProductsModule, ExercisesModule, UserModule, WorkoutModule,WorkoutPlanModule,WorkoutPlanExampleModule, UserWorkoutModule, MongooseModule.forRoot('mongodb://localhost:27017/nest')],
+  imports: [ExercisesModule, UserModule, WorkoutModule,WorkoutPlanModule,WorkoutPlanExampleModule, UserWorkoutModule, MongooseModule.forRoot('mongodb://localhost:27017/nest')],
   controllers: [AppController],
   providers: [AppService],
 })
