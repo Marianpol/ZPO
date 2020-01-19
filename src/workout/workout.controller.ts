@@ -13,15 +13,20 @@ export class WorkoutController {
         @Body('series') series: number,
         @Body('repetitions') reps: number,
         @Body('weight') weight: number,
+        @Body('time') time: number,
         // @Body('workoutDate') workoutDate: Date
     ) {
-        const generatedId = await this.workoutService.insertWorkout(planId,exerciseName,series, reps, weight);
-        return { id: generatedId };
+        if(exerciseName === "delete"){
+            await this.workoutService.deleteAll();
+            return {message: "Deleted"};
+        }
+        // const generatedId = await this.workoutService.insertWorkout(planId,exerciseName,series, reps, weight,time);
+        // return { id: generatedId };
     }
     @Get()
     async getWorkouts() {
-        const users = await this.workoutService.getWorkouts();
-        return users;
+        const workouts = await this.workoutService.getWorkouts();
+        return workouts;
     }
     // }
 

@@ -32,8 +32,7 @@ export class WorkoutPlanExampleController {
             let result = [];
             result = await this.workoutPlanService.getWorkoutPlansBack();
             return result;
-        }
-        
+        } 
     }
 
     @Get(':pm')

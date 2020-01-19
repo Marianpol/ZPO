@@ -16,6 +16,7 @@ export class WorkoutService {
         series: number,
         reps: number,
         weight: number,
+        time: number,
         // workoutDate: Date
         ){
             const newWorkout = new this.workoutModel({
@@ -25,6 +26,7 @@ export class WorkoutService {
                 series,
                 repetitions: reps,
                 weight,
+                time,
                 // workoutDate,
             });
             const result = await newWorkout.save();
@@ -33,32 +35,24 @@ export class WorkoutService {
 
     async getWorkouts(){
         const workouts = await this.workoutModel.find().exec();
-        // let finedWorkout = [];
-        // for (let x of workouts){
-        //     if(x.username === uname && x.workoutDate.getTime() === new Date(wdate).getTime()){
-        //         finedWorkout.push(x);
-        //     }
-        // }
-        return workouts.map((item) => ({
-            id: item.planId,
-            name: item.exerciseName,
-            // username: item.username,
-            series: item.series,
-            reps: item.repetitions,
-            weight: item.weight,
-            // workoutDate: item.workoutDate,
-        }))
-        // return finedWorkout.map((wo) => ({
-        //     id: wo.id,
-        //     name: wo.exerciseName,
-        //     username: wo.username,
-        //     series: wo.series,
-        //     reps: wo.repetitions,
-        //     weight: wo.weight,
-        //     workoutDate: wo.workoutDate,
-        // }));
+        return workouts;
+        // return workouts.map((item) => ({
+        //     idDB: item._id,
+        //     id: item.planId,
+        //     name: item.exerciseName,
+        //     // username: item.username,
+        //     series: item.series,
+        //     reps: item.repetitions,
+        //     weight: item.weight,
+        //     time: item.time,
+        //     // workoutDate: item.workoutDate,
+        // }))
         
-    }////
+    }
+    async deleteAll(){
+        await this.workoutModel.collection.drop();
+    }
+
     // async getOneE(exerciseId: string){
     //     const exercise = await this.findWorkout();
     //     return {id: exercise.id, name: exercise.name,};
@@ -81,10 +75,10 @@ export class WorkoutService {
     //     updatedExercise.save();
     // }
 
-    async deleteWorkoutSeries(workoutId: string) {
-        const result = await this.workoutModel.deleteOne({_id: workoutId}).exec();
-        if (result.n === 0){
-            throw new NotFoundException('Could not find');
-        }
-    }
+    // async deleteWorkoutSeries(workoutId: string) {
+    //     const result = await this.workoutModel.deleteOne({_id: workoutId}).exec();
+    //     if (result.n === 0){
+    //         throw new NotFoundException('Could not find');
+    //     }
+    // }
 }

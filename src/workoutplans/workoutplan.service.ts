@@ -11,39 +11,27 @@ export class WorkoutPlanService {
 
     async insertWorkoutPlan(
         name: string,
-        exerciseName: string,
-        // username: string,
-        series: number,
-        reps: number,
-        weight: number,
-        time: number,
         ){
         const newWorkoutPlan = new this.workoutPlanModel({
             name,
-            exerciseName,
-            // username,
-            series,
-            repetitions: reps,
-            weight,
-            time,
-            // workoutDate,
         });
         const result = await newWorkoutPlan.save();
         return result.id;
     }
 
-    // async getWorkoutPlans(){
-    //     const workoutPlans = await this.workoutPlanModel.find().exec();
-    //     return workoutPlans.map((wp) => ({id: wp.id, name: wp.name, exerciseName: wp.exerciseName, series: wp.series, reps: wp.repetitions, weight:wp.weight, time: wp.time, }));
-    // }
+    async getWorkoutPlans(){
+        const workoutPlans = await this.workoutPlanModel.find().exec();
+        return workoutPlans.map((wp) => ({id: wp.id, name: wp.name}));
+    }
+
     async getWrokoutPlansNames(){
         const workoutPlans = await this.workoutPlanModel.find().exec();
         return Array.from(new Set(workoutPlans.map((item: any) => item.name)));
     }
-    getWrokoutPlansExercisesNames(workoutPlans: any[]){
+    getWrokoutPlanExercisesNames(workoutPlans: any[]){
         return Array.from(new Set(workoutPlans.map((item: any) => item.exerciseName)));
     }
-    getWrokoutPlanSeries(workoutPlans: any[]){
+    getWrokoutPlanAllExercisesNames(workoutPlans: any[]){
         return workoutPlans.map((item: any) => item.exerciseName);   
     }
     getSeriesNumber(exercises: any[], exercisesNames: any[]){
@@ -53,38 +41,35 @@ export class WorkoutPlanService {
         }
         return namesNumber;
     }
-
-    async getWorkoutPlansBack(){
+    async getWorkoutPlansBack(workoutPlansExercises: any[]){
         let readyPlan = [];
         let workoutPlans = await this.workoutPlanModel.find().exec();
-        let workoutPlanNames = Array.from(new Set(workoutPlans.map((item: any) => item.name)));
-        workoutPlans = [];
-        for (let workoutName of workoutPlanNames){
-            let selectedWorkoutPlan = await this.workoutPlanModel.find({name: workoutName})
-            let exercises = this.getWrokoutPlansExercisesNames(selectedWorkoutPlan);
-            let exercisesAllNames = this.getWrokoutPlanSeries(selectedWorkoutPlan);
-            let x = this.getSeriesNumber(exercises,exercisesAllNames);
+        for(let workoutPlan of workoutPlans){
+            let workoutPlanExercises = workoutPlansExercises.filter(item => item["planId"] == workoutPlan._id);
+            let exercises = this.getWrokoutPlanExercisesNames(workoutPlanExercises);
+            let exercisesAllNames = this.getWrokoutPlanAllExercisesNames(workoutPlanExercises);
+            let exercisesSieriesNumbers = this.getSeriesNumber(exercises,exercisesAllNames);
             let restoredPlan = {};
             let restoredExercise = {};
             let restoredSeries = {};
             let series = [];
             let training = [];
             let counter = 0;
-            
-            restoredPlan['id'] = counter;
-            restoredPlan['name'] = workoutName;
-            for(let i = 0; i < x.length; i++){
+
+            restoredPlan['id'] = workoutPlan["_id"];
+            restoredPlan['name'] = workoutPlan["name"];
+            for(let i = 0; i < exercisesSieriesNumbers.length; i++){
                 restoredExercise['id'] = i;
                 restoredExercise['name'] = exercises[i];
-                for(let j = counter; j < counter + x[i] ; j++){
-                    restoredSeries['id'] = selectedWorkoutPlan[j].series;
-                    restoredSeries['repeat'] = selectedWorkoutPlan[j].repetitions;
-                    restoredSeries['kg'] = selectedWorkoutPlan[j].weight;
-                    restoredSeries['time'] = selectedWorkoutPlan[j].time;
+                for(let j = counter; j < counter + exercisesSieriesNumbers[i] ; j++){
+                    restoredSeries['id'] = workoutPlanExercises[j].series;
+                    restoredSeries['repeat'] = workoutPlanExercises[j].repetitions;
+                    restoredSeries['kg'] = workoutPlanExercises[j].weight;
+                    restoredSeries['time'] = workoutPlanExercises[j].time;
                     series.push(restoredSeries);
                     restoredSeries = {};
                 }
-                counter += x[i];
+                counter += exercisesSieriesNumbers[i];
                 restoredExercise['series'] = series;
                 series = [];
                 training.push(restoredExercise);
@@ -120,6 +105,9 @@ export class WorkoutPlanService {
         if (result.n === 0){
             throw new NotFoundException('Could not find exercise in the plan');
         }
+    }
+    async deleteAll(){
+        await this.workoutPlanModel.collection.drop();
     }
     
 }
