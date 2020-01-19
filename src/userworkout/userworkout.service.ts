@@ -40,6 +40,13 @@ export class UserWorkoutService {
         return mapInfo;
     }
 
+    async getDates(){
+        let dates = [];
+        const workouts = await this.userWorkoutModel.find().exec();
+        workouts.forEach(item => dates.push(item.workoutDate));
+        return dates;
+    }
+
     async getWorkouts(){
         const workouts = await this.userWorkoutModel.find().exec();
         return workouts;        
