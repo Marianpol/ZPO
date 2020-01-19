@@ -13,9 +13,10 @@ export class WorkoutController {
         @Body('series') series: number,
         @Body('repetitions') reps: number,
         @Body('weight') weight: number,
+        @Body('time') time: number,
         // @Body('workoutDate') workoutDate: Date
     ) {
-        const generatedId = await this.workoutService.insertWorkout(planId,exerciseName,series, reps, weight);
+        const generatedId = await this.workoutService.insertWorkout(planId,exerciseName,series, reps, weight,time);
         return { id: generatedId };
     }
     @Get()

@@ -2,13 +2,14 @@ import { Injectable, NotFoundException } from "@nestjs/common";
 import { WorkoutPlan } from "./workoutplan.model";
 import { InjectModel  } from "@nestjs/mongoose";
 import { Model } from 'mongoose';
+import { WorkoutService } from "../workout/workout.service";
 
 @Injectable()
 export class WorkoutPlanService {
     private workoutPlans: WorkoutPlan[] = [];
 
     constructor(@InjectModel('WorkoutPlan') private readonly workoutPlanModel: Model<WorkoutPlan>){}
-
+    private workoutService : WorkoutService;
     async insertWorkoutPlan(name: string){
         const newWorkoutPlan = new this.workoutPlanModel({
             name,

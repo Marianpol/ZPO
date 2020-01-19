@@ -8,6 +8,7 @@ export const WorkoutSchema = new mongoose.Schema({
     series: {type: Number, required: true },
     repetitions: {type: Number, required: true },
     weight: { type: Number, required: false },
+    time: { type: Number, required: false},
     // workoutDate: {type: Date, required: true },
 
 }) 
@@ -20,5 +21,6 @@ export interface Workout extends mongoose.Document {
     series: number;
     repetitions: number;
     weight: number;
+    time: number;
     // workoutDate: Date;
 }

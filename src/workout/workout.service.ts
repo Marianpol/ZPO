@@ -16,6 +16,7 @@ export class WorkoutService {
         series: number,
         reps: number,
         weight: number,
+        time: number,
         // workoutDate: Date
         ){
             const newWorkout = new this.workoutModel({
@@ -25,6 +26,7 @@ export class WorkoutService {
                 series,
                 repetitions: reps,
                 weight,
+                time,
                 // workoutDate,
             });
             const result = await newWorkout.save();
@@ -40,12 +42,14 @@ export class WorkoutService {
         //     }
         // }
         return workouts.map((item) => ({
+            idDB: item._id,
             id: item.planId,
             name: item.exerciseName,
             // username: item.username,
             series: item.series,
             reps: item.repetitions,
             weight: item.weight,
+            time: item.time,
             // workoutDate: item.workoutDate,
         }))
         // return finedWorkout.map((wo) => ({

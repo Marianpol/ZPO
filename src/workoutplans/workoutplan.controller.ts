@@ -1,34 +1,31 @@
 import { Controller, Post, Body, Get, Param, Patch, Delete } from "@nestjs/common";
 import { WorkoutPlanService } from "./workoutplan.service";
-import { WorkoutService} from "../workout/workout.service";
+import { WorkoutService } from "../workout/workout.service";
 
 @Controller('workoutplan')
 export class WorkoutPlanController {
-    constructor(private readonly workoutPlanService: WorkoutPlanService) { }
-    private workoutService : WorkoutService;
+    constructor(private readonly workoutPlanService: WorkoutPlanService,
+                private readonly workoutService : WorkoutService) { }
     
     @Post()
     async addWorkoutPlan(
         @Body('name') name: string,
         @Body('training') training: any[],
     ) {
+        console.log(this);
         const generatedId = await this.workoutPlanService.insertWorkoutPlan(name);
-        for (let i = 0; i < training.map(({ series }: any) => series.length)[0]; i++) {
-            const trainingArray: any = training.map(({ id, name, series }: any, index: any) => ({
-              id,
-              name,
-              idSeries: series.map(({ id }: any) => id)[i],
-              kg: series.map(({ kg }: any) => kg)[i],
-              time: series.map(({ time }: any) => time)[i],
-              repeat: series.map(({ repeat }: any) => repeat)[i],
-            }));
-            this.workoutService.insertWorkout.call(this.workoutService,
-                generatedId,
-                trainingArray.name,
-                trainingArray.idSeries,
-                trainingArray.repeat,
-                trainingArray.kg,);
-          }
+        for(let i = 0; i < training.length; i++){
+            for (let j = 0; j < training.map(({ series }: any) => series.length)[0]; j++) {
+                let tr = training[i]['series'][j];
+                this.workoutService.insertWorkout(
+                    generatedId,
+                    training[i]['name'],
+                    tr['id'],
+                    tr['repeat'],
+                    tr['kg'],
+                    tr['time']);
+            }
+        }
         return { id: generatedId };
     }
     @Get()
