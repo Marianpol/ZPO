@@ -11,17 +11,15 @@ export class WorkoutPlanController {
     
     @Post()
     async addWorkoutPlan(
-        @Body('name') name: string,
+        @Body('title') title: string,
+        @Body('name') name:string,
         @Body('training') training: any[],
+        @Body('trainingPlan') trainingPlan: any[],
         @Body('dates') dates : any[],
     ) { 
         if(name === "delete"){
             await this.workoutPlanService.deleteAll();
             return {message: "Deleted"};
-        }
-        if(name === "info"){
-            const workouts = await this.userWorkoutService.getWorkoutInfo();
-            return workouts;
         }
 
         if(name){
@@ -38,7 +36,9 @@ export class WorkoutPlanController {
                         tr['time'],);
                 }
             }
-            dates.forEach(date => this.userWorkoutService.insertWorkout(generatedId, name, date));
+        }
+        else if(title){
+            dates.forEach(date => this.userWorkoutService.insertWorkout(trainingPlan[0]['id'], title, date));
         }
         else{
             let result = [];
