@@ -20,10 +20,6 @@ export class WorkoutController {
             await this.workoutService.deleteAll();
             return {message: "Deleted"};
         }
-        if(exerciseName === "mapinfo"){
-            const workouts = await this.workoutService.getWorkoutInfo();
-            return workouts;
-        }
         // const generatedId = await this.workoutService.insertWorkout(planId,exerciseName,series, reps, weight,time);
         // return { id: generatedId };
     }

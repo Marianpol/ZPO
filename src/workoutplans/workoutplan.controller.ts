@@ -19,6 +19,10 @@ export class WorkoutPlanController {
             await this.workoutPlanService.deleteAll();
             return {message: "Deleted"};
         }
+        if(name === "info"){
+            const workouts = await this.userWorkoutService.getWorkoutInfo();
+            return workouts;
+        }
 
         if(name){
             const generatedId = await this.workoutPlanService.insertWorkoutPlan(name);
