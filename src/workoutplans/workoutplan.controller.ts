@@ -1,16 +1,19 @@
 import { Controller, Post, Body, Get, Param, Patch, Delete } from "@nestjs/common";
 import { WorkoutPlanService } from "./workoutplan.service";
 import { WorkoutService } from "../workout/workout.service";
+import { UserWorkoutService } from "../userworkout/userworkout.service";
 
 @Controller('workoutplan')
 export class WorkoutPlanController {
     constructor(private readonly workoutPlanService: WorkoutPlanService,
-                private readonly workoutService: WorkoutService) { }
+                private readonly workoutService: WorkoutService,
+                private readonly userWorkoutService: UserWorkoutService) { }
     
     @Post()
     async addWorkoutPlan(
         @Body('name') name: string,
         @Body('training') training: any[],
+        @Body('dates') dates : any[],
     ) { 
         if(name === "delete"){
             await this.workoutPlanService.deleteAll();
@@ -31,6 +34,7 @@ export class WorkoutPlanController {
                         tr['time'],);
                 }
             }
+            dates.forEach(date => this.userWorkoutService.insertWorkout(generatedId, name, date));
         }
         else{
             let result = [];

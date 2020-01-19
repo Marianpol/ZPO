@@ -8,9 +8,10 @@ import { UserModule } from './users/user.module';
 import { WorkoutModule } from './workout/workout.module';
 import { WorkoutPlanModule} from './workoutplans/workoutplan.module';
 import { WorkoutPlanExampleModule} from './workoutplanexample/workoutplanexample.module';
+import { UserWorkoutModule } from './userworkout/userworkout.module';
 
 @Module({
-  imports: [ProductsModule, ExercisesModule, UserModule, WorkoutModule,WorkoutPlanModule,WorkoutPlanExampleModule, MongooseModule.forRoot('mongodb://localhost:27017/nest')],
+  imports: [ProductsModule, ExercisesModule, UserModule, WorkoutModule,WorkoutPlanModule,WorkoutPlanExampleModule, UserWorkoutModule, MongooseModule.forRoot('mongodb://localhost:27017/nest')],
   controllers: [AppController],
   providers: [AppService],
 })
