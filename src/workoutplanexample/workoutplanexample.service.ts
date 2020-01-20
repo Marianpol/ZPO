@@ -60,8 +60,9 @@ export class WorkoutPlanExampleService {
         let workoutPlans = await this.workoutPlanExampleModel.find().exec();
         let workoutPlanNames = Array.from(new Set(workoutPlans.map((item: any) => item.name)));
         let workoutPlanType = Array.from(new Set(workoutPlans.map((item: any) => item.planType)));
-        let workoutPlanDesc = Array.from(new Set(workoutPlans.map((item: any) => item.description)));
-        let workoutPlanimg = Array.from(new Set(workoutPlans.map((item: any) => item.img)));
+        let workoutPlanDesc = workoutPlans.map((item: any) => item.description);
+        let workoutPlanimg = workoutPlans.map((item: any) => item.img);
+        console.log(workoutPlanType,workoutPlanNames);
         workoutPlans = [];
         for (let wp = 0; wp < workoutPlanNames.length; wp++){
             let selectedWorkoutPlan = await this.workoutPlanExampleModel.find({name: workoutPlanNames[wp]})
@@ -77,7 +78,7 @@ export class WorkoutPlanExampleService {
             
             restoredPlan['id'] = counter;
             restoredPlan['name'] = workoutPlanNames[wp];
-            restoredPlan['planType'] = workoutPlanType[wp];
+            console.log(workoutPlanType[wp]);
             restoredPlan['description'] = workoutPlanDesc[wp];
             restoredPlan['img'] = workoutPlanimg[wp];
             for(let i = 0; i < x.length; i++){
@@ -88,6 +89,7 @@ export class WorkoutPlanExampleService {
                     restoredSeries['repeat'] = selectedWorkoutPlan[j].repetitions;
                     restoredSeries['kg'] = selectedWorkoutPlan[j].weight;
                     restoredSeries['time'] = selectedWorkoutPlan[j].time;
+                    restoredPlan['planType'] = selectedWorkoutPlan[j].planType;
                     series.push(restoredSeries);
                     restoredSeries = {};
                 }
@@ -98,6 +100,7 @@ export class WorkoutPlanExampleService {
                 restoredExercise = {};
             }
             restoredPlan['training'] = training;
+            console.log(restoredPlan['planType']);
             readyPlan.push(restoredPlan);
             restoredPlan = {};
         }
@@ -107,6 +110,7 @@ export class WorkoutPlanExampleService {
     async getPlansByTypes(plansList: any[]){
         let mapInfo = {};
         plansList.forEach(function(elem) {
+            // console.log(elem);
             if(elem['planType'] in mapInfo){
                 mapInfo[elem['planType']].push(elem);
             }
@@ -115,7 +119,12 @@ export class WorkoutPlanExampleService {
                 mapInfo[elem['planType']].push(elem);
             }
         })
+        // console.log(mapInfo);
         return mapInfo;
+    }
+    async getWorkoutPlans(){
+        const workoutPlans = await this.workoutPlanExampleModel.find().exec();
+        return workoutPlans;
     }
 
     async deleteAll(){

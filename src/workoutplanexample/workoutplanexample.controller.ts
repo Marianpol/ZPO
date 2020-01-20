@@ -35,9 +35,14 @@ export class WorkoutPlanExampleController {
             }
         }
         else{
-            let result = [];
-            result = await this.workoutPlanService.getWorkoutPlansBack();
+            let result = await this.workoutPlanService.getPlansByTypes(await this.workoutPlanService.getWorkoutPlansBack());
             return result;
         } 
+    }
+
+    @Get()
+    async getWorkouts() {
+        const workouts = await this.workoutPlanService.getWorkoutPlans();
+        return workouts;
     }
 }
