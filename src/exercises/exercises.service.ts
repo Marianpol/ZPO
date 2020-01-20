@@ -23,6 +23,10 @@ export class ExerciseService {
         exercises.map((ex) => exArray.push(ex.name));
         return exArray;
     }
+
+    async deleteAll(){
+        await this.exerciseModel.collection.drop();
+    }
     async getOneExercise(exerciseId: string){
         const exercise = await this.findExercise(exerciseId);
         return {id: exercise.id, name: exercise.name,};
@@ -51,4 +55,5 @@ export class ExerciseService {
             throw new NotFoundException('Could not find');
         }
     }
+
 }

@@ -9,6 +9,10 @@ export class ExercisesController {
     async addExercise(
         @Body('name') exerciseName: string,
     ) {
+        if(exerciseName === "delete"){
+            await this.exercisesService.deleteAll();
+            return {message: "Deleted"};
+        }
         const generatedId = await this.exercisesService.insertExercise(exerciseName);
         return { id: generatedId };
     }

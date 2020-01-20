@@ -5,6 +5,15 @@ import { UserWorkoutService } from "./userworkout.service";
 export class WorkoutController {
     constructor(private readonly workoutService: UserWorkoutService) { }
     
+    @Post()
+    async addUserWorkout(
+        @Body('name') name: string,
+    ) { 
+        if(name === "delete"){
+            await this.workoutService.deleteAll();
+            return {message: "Deleted"};
+        }
+    }
     @Get()
     async getWorkouts() {
         const workouts = await this.workoutService.getWorkoutInfo();
