@@ -44,6 +44,16 @@ export class UserWorkoutService {
         mapInfo['calendarDates'] = dates;
         return mapInfo;
     }
+
+    async getWorkoutsByDate(date: Date){
+        const result = this.userWorkoutModel.find({ workoutDate: new Date(date)})
+        return result;
+    }
+    async getWorkoutAllDates(id: string){
+        const workouts = await this.userWorkoutModel.find({ planId: id})
+        const dates = workouts.map((workout: any) => workout.workoutDate);
+        return dates;
+    }
     
     async deleteAll(){
         await this.userWorkoutModel.collection.drop();

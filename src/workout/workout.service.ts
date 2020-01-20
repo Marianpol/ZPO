@@ -36,6 +36,15 @@ export class WorkoutService {
         const workouts = await this.workoutModel.find().exec();
         return workouts;   
     }
+    async getWorkoutById(workoutsBaseInfo : any[]){
+        let workouts = [];
+        for(let workout of workoutsBaseInfo){
+            let temp = await this.workoutModel.find({planId: workout.planId}).exec();
+            temp.forEach(serie => workouts.push(serie));
+        }
+        // workoutsBaseInfo.forEach(workout => workouts.push(this.workoutModel.find({planId: workout.planId}).exec()));
+        return workouts;   
+    }
 
     async deleteAll(){
         await this.workoutModel.collection.drop();

@@ -16,6 +16,7 @@ export class WorkoutPlanController {
         @Body('training') training: any[],
         @Body('trainingPlan') trainingPlan: any[],
         @Body('dates') dates : any[],
+        @Body('date') date : Date,
     ) { 
         if(name === "delete"){
             await this.workoutPlanService.deleteAll();
@@ -39,6 +40,18 @@ export class WorkoutPlanController {
         }
         else if(title){
             dates.forEach(date => this.userWorkoutService.insertWorkout(trainingPlan[0]['id'], title, date));
+        }
+        else if(date){
+            let result = [];
+            const workoutsId = await this.userWorkoutService.getWorkoutsByDate(date);
+            const workoutsData = await this.workoutService.getWorkoutById(workoutsId);
+            result = await this.workoutPlanService.getWorkoutPlansBack(workoutsData, 1);
+            console.log(workoutsId[0],workoutsId[0].planName);
+            for(let i = 0; i < workoutsId.length; i++){
+                result[i]['title'] = workoutsId[i].planName;
+                result[i]['dates'] = await this.userWorkoutService.getWorkoutAllDates(result[i].id);
+            }
+            return result;
         }
         else{
             let result = [];

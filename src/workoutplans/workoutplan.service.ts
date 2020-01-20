@@ -37,9 +37,16 @@ export class WorkoutPlanService {
         }
         return namesNumber;
     }
-    async getWorkoutPlansBack(workoutPlansExercises: any[]){
+    async getWorkoutPlansBack(workoutPlansExercises: any[], param = 0){
         let readyPlan = [];
-        let workoutPlans = await this.workoutPlanModel.find().exec();
+        let workoutPlans = [];
+        if(param){
+            let setOfPlanNames = Array.from(new Set(workoutPlansExercises.map((item: any) => item.planId)));
+            workoutPlans = await this.workoutPlanModel.find().where('_id').in(setOfPlanNames).exec();
+        }
+        else{
+            workoutPlans = await this.workoutPlanModel.find().exec();
+        }
         for(let workoutPlan of workoutPlans){
             let workoutPlanExercises = workoutPlansExercises.filter(item => item["planId"] == workoutPlan._id);
             let exercises = this.getWrokoutPlanExercisesNames(workoutPlanExercises);
