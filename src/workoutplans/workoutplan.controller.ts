@@ -46,10 +46,9 @@ export class WorkoutPlanController {
             const workoutsId = await this.userWorkoutService.getWorkoutsByDate(date);
             const workoutsData = await this.workoutService.getWorkoutById(workoutsId);
             result = await this.workoutPlanService.getWorkoutPlansBack(workoutsData, 1);
-            console.log(workoutsId[0],workoutsId[0].planName);
             for(let i = 0; i < workoutsId.length; i++){
                 result[i]['title'] = workoutsId[i].planName;
-                result[i]['dates'] = await this.userWorkoutService.getWorkoutAllDates(result[i].id);
+                result[i]['dates'] = await this.userWorkoutService.getWorkoutAllDates(result[i].trainingPlan.id);
             }
             return result;
         }

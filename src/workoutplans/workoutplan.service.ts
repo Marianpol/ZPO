@@ -79,7 +79,13 @@ export class WorkoutPlanService {
                 restoredExercise = {};
             }
             restoredPlan['training'] = training;
-            readyPlan.push(restoredPlan);
+            if(param){
+                let temp = {trainingPlan:restoredPlan};
+                readyPlan.push(temp);
+            }
+            else{
+                readyPlan.push(restoredPlan);
+            }
             restoredPlan = {};
         }
         return readyPlan;
