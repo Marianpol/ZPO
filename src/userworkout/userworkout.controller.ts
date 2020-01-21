@@ -13,6 +13,10 @@ export class WorkoutController {
             await this.workoutService.deleteAll();
             return {message: "Deleted"};
         }
+        if(name === ""){
+            const workouts = await this.workoutService.getAllWorkouts();
+            return workouts;
+        }
     }
     @Get()
     async getWorkouts() {

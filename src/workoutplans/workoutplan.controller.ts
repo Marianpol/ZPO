@@ -2,7 +2,6 @@ import { Controller, Post, Body, Get, Param, Patch, Delete } from "@nestjs/commo
 import { WorkoutPlanService } from "./workoutplan.service";
 import { WorkoutService } from "../workout/workout.service";
 import { UserWorkoutService } from "../userworkout/userworkout.service";
-import { connectableObservableDescriptor } from "rxjs/internal/observable/ConnectableObservable";
 
 @Controller('workoutplan')
 export class WorkoutPlanController {

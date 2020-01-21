@@ -45,6 +45,11 @@ export class UserWorkoutService {
         return mapInfo;
     }
 
+    async getAllWorkouts(){
+        const workouts = await this.userWorkoutModel.find().exec();
+        return workouts;
+    }
+
     async getWorkoutsByDate(date: Date){
         const result = this.userWorkoutModel.find({ workoutDate: new Date(date)})
         return result;
