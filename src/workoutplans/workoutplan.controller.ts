@@ -2,6 +2,7 @@ import { Controller, Post, Body, Get, Param, Patch, Delete } from "@nestjs/commo
 import { WorkoutPlanService } from "./workoutplan.service";
 import { WorkoutService } from "../workout/workout.service";
 import { UserWorkoutService } from "../userworkout/userworkout.service";
+import { connectableObservableDescriptor } from "rxjs/internal/observable/ConnectableObservable";
 
 @Controller('workoutplan')
 export class WorkoutPlanController {
@@ -42,6 +43,7 @@ export class WorkoutPlanController {
             dates.forEach(date => this.userWorkoutService.insertWorkout(trainingPlan[0]['id'], title, date));
         }
         else if(date){
+            console.log(date);
             let result = [];
             const workoutsId = await this.userWorkoutService.getWorkoutsByDate(date);
             const workoutsData = await this.workoutService.getWorkoutById(workoutsId);
