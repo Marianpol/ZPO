@@ -41,7 +41,7 @@ export class WorkoutPlanService {
         let readyPlan = [];
         let workoutPlans = [];
         if(param){
-            let setOfPlanNames = Array.from(new Set(workoutPlansExercises.map((item: any) => item.planId)));
+            let setOfPlanNames = workoutPlansExercises.map((item: any) => item.planId);
             workoutPlans = await this.workoutPlanModel.find().where('_id').in(setOfPlanNames).exec();
         }
         else{
