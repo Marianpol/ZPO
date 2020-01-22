@@ -23,4 +23,8 @@ export class WorkoutController {
         const workouts = await this.workoutService.getWorkoutInfo();
         return workouts;
     }
+    @Delete()
+    async deleteFromCalendar(@Body('id') id: string,){
+        await this.workoutService.deleteWorkoutFromCalendar(id);
+    }
 }

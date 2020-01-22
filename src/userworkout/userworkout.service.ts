@@ -70,4 +70,11 @@ export class UserWorkoutService {
             throw new NotFoundException('Could not find exercises in userworkout');
         }
     }
+
+    async deleteWorkoutFromCalendar(id: string){
+        const result = await this.userWorkoutModel.deleteOne({_id: id}).exec();
+        if (result.n === 0){
+            throw new NotFoundException('Could not find workout on given date');
+        }
+    }
 }
