@@ -28,7 +28,7 @@ export class WorkoutPlanController {
             for(let i = 0; i < training.length; i++){
                 for (let j = 0; j < training.map(({ series }: any) => series.length)[0]; j++) {
                     let tr = training[i]['series'][j];
-                    this.workoutService.insertWorkout(
+                    await this.workoutService.insertWorkout(
                         generatedId,
                         training[i]['name'],
                         tr['id'],
@@ -66,6 +66,29 @@ export class WorkoutPlanController {
     async getWorkoutPlans() {
         const workoutPlans = await this.workoutPlanService.getWorkoutPlans();
         return workoutPlans;
+    }
+    @Patch()
+    async changeWorkoutPlan(
+        @Body('id') id:string,
+        @Body('name') name:string,
+        @Body('training') training: any[],
+        ){
+        await this.workoutPlanService.deleteOne(id);
+        await this.workoutService.deleteWorkout(id);
+        await this.userWorkoutService.deleteExercises(id);
+        const generatedId = await this.workoutPlanService.insertWorkoutPlan(name);
+            for(let i = 0; i < training.length; i++){
+                for (let j = 0; j < training.map(({ series }: any) => series.length)[0]; j++) {
+                    let tr = training[i]['series'][j];
+                    await this.workoutService.insertWorkout(
+                        generatedId,
+                        training[i]['name'],
+                        tr['id'],
+                        tr['repeat'],
+                        tr['kg'],
+                        tr['time'],);
+                }
+            }
     }
     @Delete()
     async deletePlan(@Body('id') id: string,){

@@ -61,7 +61,6 @@ export class WorkoutPlanService {
                     }
                 }
             }
-            console.log(workoutPlans);
         }
         else{
             workoutPlans = await this.workoutPlanModel.find().exec();
