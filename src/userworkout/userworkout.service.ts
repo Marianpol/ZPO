@@ -66,9 +66,9 @@ export class UserWorkoutService {
 
     async deleteExercises(id: string) {
         const result = await this.userWorkoutModel.deleteMany({planId: id}).exec();
-        if (result.n === 0){
-            throw new NotFoundException('Could not find exercises in userworkout');
-        }
+        // if (result.n === 0){
+        //     throw new NotFoundException('Could not find exercises in userworkout');
+        // }
     }
 
     async deleteWorkoutFromCalendar(id: string){
