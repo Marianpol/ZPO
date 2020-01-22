@@ -23,10 +23,4 @@ export class WorkoutController {
         const workouts = await this.workoutService.getWorkoutInfo();
         return workouts;
     }
-
-    @Delete(':id')
-    async removeExercise(@Param('id') exerciseId: string,){
-        await this.workoutService.deleteExercise(exerciseId);
-        return null;
-    }
 }

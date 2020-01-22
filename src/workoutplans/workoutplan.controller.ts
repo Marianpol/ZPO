@@ -67,4 +67,10 @@ export class WorkoutPlanController {
         const workoutPlans = await this.workoutPlanService.getWorkoutPlans();
         return workoutPlans;
     }
+    @Delete()
+    async deletePlan(@Body('id') id: string,){
+        await this.workoutPlanService.deleteOne(id);
+        await this.workoutService.deleteWorkout(id);
+        await this.userWorkoutService.deleteExercises(id);
+    }
 }

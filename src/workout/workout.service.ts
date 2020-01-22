@@ -1,4 +1,4 @@
-import { Injectable} from "@nestjs/common";
+import { Injectable, NotFoundException} from "@nestjs/common";
 import { Workout } from "./workout.model";
 import { InjectModel } from "@nestjs/mongoose";
 import { Model } from 'mongoose';
@@ -48,5 +48,12 @@ export class WorkoutService {
 
     async deleteAll(){
         await this.workoutModel.collection.drop();
+    }
+
+    async deleteWorkout(id: string) {
+        const result = await this.workoutModel.deleteMany({planId: id}).exec();
+        if (result.n === 0){
+            throw new NotFoundException('Could not find in workout');
+        }
     }
 }

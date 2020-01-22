@@ -113,5 +113,12 @@ export class WorkoutPlanService {
     async deleteAll(){
         await this.workoutPlanModel.collection.drop();
     }
+
+    async deleteOne(id: string) {
+        const result = await this.workoutPlanModel.deleteOne({_id: id}).exec();
+        if (result.n === 0){
+            throw new NotFoundException('Could not find in workoutplan');
+        }
+    }
     
 }
