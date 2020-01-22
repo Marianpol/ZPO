@@ -42,13 +42,11 @@ export class WorkoutPlanController {
             dates.forEach(date => this.userWorkoutService.insertWorkout(trainingPlan[0]['id'], title, date));
         }
         else if(date){
-            // console.log(date);
             let result = [];
             const workoutsId = await this.userWorkoutService.getWorkoutsByDate(date);
             const duplicates = await this.workoutPlanService.searchForDupicates(workoutsId);
             const workoutsData = await this.workoutService.getWorkoutById(workoutsId);
             result = await this.workoutPlanService.getWorkoutPlansBack(workoutsData, 1, duplicates);
-            // console.log(workoutsData);
             for(let i = 0; i < workoutsId.length; i++){
                 result[i]['id'] = workoutsId[i]._id;
                 result[i]['title'] = workoutsId[i].planName;

@@ -35,9 +35,9 @@ export class ExercisesController {
             await this.exercisesService.updateExercise(exerciseId, exerciseName);
             return null;
         }
-    @Delete(':id')
-    async removeExercise(@Param('id') exerciseId: string,){
-        await this.exercisesService.deleteExercise(exerciseId);
+    @Delete()
+    async removeExercise(@Body('exercises') exercises: any[],){
+        await this.exercisesService.deleteExercise(exercises);
         return null;
     }
 }
