@@ -63,4 +63,11 @@ export class UserWorkoutService {
     async deleteAll(){
         await this.userWorkoutModel.collection.drop();
     }
+
+    async deleteExercise(exerciseId: string) {
+        const result = await this.userWorkoutModel.deleteOne({_id: exerciseId}).exec();
+        if (result.n === 0){
+            throw new NotFoundException('Could not find');
+        }
+    }
 }

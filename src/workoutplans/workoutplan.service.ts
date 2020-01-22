@@ -2,6 +2,7 @@ import { Injectable, NotFoundException } from "@nestjs/common";
 import { WorkoutPlan } from "./workoutplan.model";
 import { InjectModel  } from "@nestjs/mongoose";
 import { Model } from 'mongoose';
+import { EOVERFLOW } from "constants";
 
 @Injectable()
 export class WorkoutPlanService {
@@ -37,12 +38,30 @@ export class WorkoutPlanService {
         }
         return namesNumber;
     }
-    async getWorkoutPlansBack(workoutPlansExercises: any[], param = 0){
+
+    async searchForDupicates(workouts: any[]){
+        const ids = [];
+        let theSamePlanCounter = {};
+        workouts.forEach(elem => ids.push(elem.planId));
+        ids.forEach(function(i) { theSamePlanCounter[i] = (theSamePlanCounter[i]||0) + 1;});
+        return theSamePlanCounter;
+    }
+
+    async getWorkoutPlansBack(workoutPlansExercises: any[], param = 0, duplicates: {[key: string]: number;} =  {}){
         let readyPlan = [];
         let workoutPlans = [];
         if(param){
             let setOfPlanNames = Array.from(new Set(workoutPlansExercises.map((item: any) => item.planId)));
             workoutPlans = await this.workoutPlanModel.find().where('_id').in(setOfPlanNames).exec();
+            for (const [key, value] of Object.entries(duplicates)) {
+                if(value > 1){
+                    let toCopy = workoutPlans.filter(item => item._id == key);
+                    for(let i = 0; i < value - 1; i++){
+                        workoutPlans.push(toCopy[0]);
+                    }
+                }
+            }
+            console.log(workoutPlans);
         }
         else{
             workoutPlans = await this.workoutPlanModel.find().exec();
