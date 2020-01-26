@@ -2,9 +2,9 @@ import * as mongoose from 'mongoose';
 import { MongooseModule } from '@nestjs/mongoose';
 
 export const UserSchema = new mongoose.Schema({
-    username :  { type: String, required: true },
-    password :  { type: String, required: true },
-    email:      { type: String, required: true },
+    username :  { type: String, required: true, unique: true, },
+    password :  { type: String, required: true, unique: false, },
+    email:      { type: String, required: true, unique: true, },
 }) 
 
 export interface User extends mongoose.Document {

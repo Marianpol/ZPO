@@ -1,5 +1,6 @@
-import { Controller, Post, Body, Get} from "@nestjs/common";
+import { Controller, Post, Body, Get, UseGuards} from "@nestjs/common";
 import { WorkoutService } from "./workout.service";
+import { AuthGuard } from "@nestjs/passport";
 
 @Controller('workout')
 export class WorkoutController {
@@ -14,7 +15,8 @@ export class WorkoutController {
             return {message: "Deleted"};
         }
     }
-
+    
+    @UseGuards(AuthGuard('jwt'))
     @Get()
     async getWorkouts() {
         const workouts = await this.workoutService.getWorkouts();

@@ -14,11 +14,11 @@ export class UserController {
         const generatedId = await this.userService.insertUser(username, pass, email);
         return { id: generatedId };
     }
-    // @Get()
-    // async getUsers() {
-    //     const users = await this.userService.getUsers();
-    //     return users;
-    // }
+    @Get()
+    async getUsers() {
+        const users = await this.userService.getUsers();
+        return users;
+    }
 
     // @Get(':id')
     // getUser(@Param('id') userId: string, ) {

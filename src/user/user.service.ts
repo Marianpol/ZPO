@@ -22,10 +22,10 @@ export class UserService {
         return user;
     }
 
-    // async getUsers(){
-    //     const users = await this.userModel.find().exec();
-    //     return users.map((us) => ({id: us.id, username: us.username, pass: us.password, email: us.email,}));
-    // }
+    async getUsers(){
+        const users = await this.userModel.find().exec();
+        return users.map((us) => ({id: us.id, username: us.username, pass: us.password, email: us.email,}));
+    }
 
     
     // async getOneUser(email: string){
