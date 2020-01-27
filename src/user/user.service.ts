@@ -14,7 +14,6 @@ export class UserService {
             username, password : pass, email,
         });
         const result = await newUser.save();
-        return result.id;
     }
 
     async findUser(username: string){

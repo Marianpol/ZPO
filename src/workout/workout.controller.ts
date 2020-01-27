@@ -5,7 +5,8 @@ import { AuthGuard } from "@nestjs/passport";
 @Controller('workout')
 export class WorkoutController {
     constructor(private readonly workoutService: WorkoutService) { }
-
+    
+    @UseGuards(AuthGuard('jwt'))
     @Post()
     async addWorkout(
         @Body('name') exerciseName: string,
@@ -16,7 +17,7 @@ export class WorkoutController {
         }
     }
     
-    // @UseGuards(AuthGuard('jwt'))
+    @UseGuards(AuthGuard('jwt'))
     @Get()
     async getWorkouts() {
         const workouts = await this.workoutService.getWorkouts();

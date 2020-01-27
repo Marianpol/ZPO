@@ -1,5 +1,6 @@
-import { Controller, Post, Body, Get, Param, Patch, Delete } from "@nestjs/common";
+import { Controller, Post, Body, Get, Param, Patch, Delete, UseGuards } from "@nestjs/common";
 import { UserService } from "./user.service";
+import { AuthGuard } from "@nestjs/passport";
 
 @Controller('user')
 export class UserController {
@@ -16,9 +17,10 @@ export class UserController {
             await this.userService.deleteAll();
             return {message: "Deleted"};
         }
-        const generatedId = await this.userService.insertUser(username, pass, email);
-        return { id: generatedId };
+        await this.userService.insertUser(username, pass, email);
+
     }
+    @UseGuards(AuthGuard('jwt'))
     @Get()
     async getUsers() {
         const users = await this.userService.getUsers();

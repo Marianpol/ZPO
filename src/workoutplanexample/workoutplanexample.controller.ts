@@ -1,10 +1,12 @@
-import { Controller, Post, Body, Get} from "@nestjs/common";
+import { Controller, Post, Body, Get, UseGuards} from "@nestjs/common";
 import { WorkoutPlanExampleService } from "./workoutplanexample.service";
+import { AuthGuard } from "@nestjs/passport";
 
 @Controller('workoutplanexample')
 export class WorkoutPlanExampleController {
     constructor(private readonly workoutPlanService: WorkoutPlanExampleService) { }
     
+    @UseGuards(AuthGuard('jwt'))
     @Post()
     async addWorkoutPlan(
         @Body('name') name: string,
@@ -40,6 +42,7 @@ export class WorkoutPlanExampleController {
         } 
     }
 
+    @UseGuards(AuthGuard('jwt'))
     @Get()
     async getWorkouts() {
         const workouts = await this.workoutPlanService.getWorkoutPlans();

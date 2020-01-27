@@ -1,7 +1,8 @@
-import { Controller, Post, Body, Get, Param, Patch, Delete } from "@nestjs/common";
+import { Controller, Post, Body, Get, Param, Patch, Delete, UseGuards } from "@nestjs/common";
 import { WorkoutPlanService } from "./workoutplan.service";
 import { WorkoutService } from "../workout/workout.service";
 import { UserWorkoutService } from "../userworkout/userworkout.service";
+import { AuthGuard } from "@nestjs/passport";
 
 @Controller('workoutplan')
 export class WorkoutPlanController {
@@ -9,6 +10,7 @@ export class WorkoutPlanController {
                 private readonly workoutService: WorkoutService,
                 private readonly userWorkoutService: UserWorkoutService) { }
     
+    @UseGuards(AuthGuard('jwt'))
     @Post()
     async addWorkoutPlan(
         @Body('title') title: string,
@@ -62,11 +64,13 @@ export class WorkoutPlanController {
         }  
     }
     
+    @UseGuards(AuthGuard('jwt'))
     @Get()
     async getWorkoutPlans() {
         const workoutPlans = await this.workoutPlanService.getWorkoutPlans();
         return workoutPlans;
     }
+    @UseGuards(AuthGuard('jwt'))
     @Patch()
     async changeWorkoutPlan(
         @Body('id') id:string,
@@ -90,6 +94,7 @@ export class WorkoutPlanController {
                 }
             }
     }
+    @UseGuards(AuthGuard('jwt'))
     @Delete()
     async deletePlan(@Body('id') id: string,){
         await this.workoutPlanService.deleteOne(id);
