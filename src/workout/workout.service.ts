@@ -42,7 +42,6 @@ export class WorkoutService {
             let temp = await this.workoutModel.find({planId: workout.planId}).exec();
             temp.forEach(serie => workouts.push(serie));
         }
-        // workoutsBaseInfo.forEach(workout => workouts.push(this.workoutModel.find({planId: workout.planId}).exec()));
         return workouts;   
     }
 

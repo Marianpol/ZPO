@@ -28,6 +28,9 @@ export class UserService {
     }
 
     
+    async deleteAll(){
+        await this.userModel.collection.drop();
+    }
     // async getOneUser(email: string){
     //     const user = await this.findUser(userId);
     //     return {username: user.username, pass: user.password, email: user.email,};

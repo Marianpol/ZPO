@@ -81,7 +81,6 @@ export class WorkoutPlanExampleService {
                 restoredExercise['id'] = i;
                 restoredExercise['name'] = exercises[i];
                 for(let j = counter; j < counter + x[i] ; j++){
-                    // console.log(selectedWorkoutPlan[j].series);
                     restoredSeries['id'] = selectedWorkoutPlan[j].series;
                     restoredSeries['repeat'] = selectedWorkoutPlan[j].repetitions;
                     restoredSeries['kg'] = selectedWorkoutPlan[j].weight;
@@ -90,7 +89,6 @@ export class WorkoutPlanExampleService {
                     restoredPlan['description'] = selectedWorkoutPlan[j].description;
                     restoredPlan['img'] = selectedWorkoutPlan[j].img;
                     series.push(restoredSeries);
-                    console.log(restoredSeries);
                     restoredSeries = {};
                 }
                 counter += x[i];
@@ -109,7 +107,6 @@ export class WorkoutPlanExampleService {
     async getPlansByTypes(plansList: any[]){
         let mapInfo = {};
         plansList.forEach(function(elem) {
-            console.log(elem['training']);
             if(elem['planType'] in mapInfo){
                 mapInfo[elem['planType']].push(elem);
             }
@@ -118,7 +115,6 @@ export class WorkoutPlanExampleService {
                 mapInfo[elem['planType']].push(elem);
             }
         })
-        // console.log(mapInfo);
         return mapInfo;
     }
     async getWorkoutPlans(){

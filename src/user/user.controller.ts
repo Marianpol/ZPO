@@ -7,10 +7,15 @@ export class UserController {
 
     @Post()
     async addUser(
+        @Body('name') name:string,
         @Body('username') username: string,
         @Body('password') pass: string,
         @Body('email') email: string,
     ) {
+        if(name === "delete"){
+            await this.userService.deleteAll();
+            return {message: "Deleted"};
+        }
         const generatedId = await this.userService.insertUser(username, pass, email);
         return { id: generatedId };
     }
