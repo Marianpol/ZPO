@@ -9,10 +9,20 @@ export class UserController {
     @Post()
     async addUser(
         @Body('name') name:string,
+        @Body('checkusername') checkUsername: string,
+        @Body('checkemail') checkEmail: string,
         @Body('username') username: string,
         @Body('password') pass: string,
         @Body('email') email: string,
     ) {
+        if(checkUsername){
+            const result = await this.userService.isPropertyInDatabase('username', checkUsername);
+            return result;
+        }
+        if(checkEmail){
+            const result = await this.userService.isPropertyInDatabase('email',checkEmail);
+            return result;
+        }
         if(name === "delete"){
             await this.userService.deleteAll();
             return {message: "Deleted"};

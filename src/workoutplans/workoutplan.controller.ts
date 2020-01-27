@@ -13,8 +13,9 @@ export class WorkoutPlanController {
     @UseGuards(AuthGuard('jwt'))
     @Post()
     async addWorkoutPlan(
+        @Body('example') exampleWorkoutPlan: string,
         @Body('title') title: string,
-        @Body('name') name:string,
+        @Body('name') name: string,
         @Body('training') training: any[],
         @Body('trainingPlan') trainingPlan: any[],
         @Body('dates') dates : any[],
@@ -25,7 +26,23 @@ export class WorkoutPlanController {
             return {message: "Deleted"};
         }
 
-        if(name){
+        if(exampleWorkoutPlan){
+            const generatedId = await this.workoutPlanService.insertWorkoutPlan("Gotowy plan");
+            for(let i = 0; i < trainingPlan.length; i++){
+                for (let j = 0; j < trainingPlan.map(({ series }: any) => series.length)[0]; j++) {
+                    let tr = trainingPlan[i]['series'][j];
+                    await this.workoutService.insertWorkout(
+                        generatedId,
+                        trainingPlan[i]['name'],
+                        tr['id'],
+                        tr['repeat'],
+                        tr['kg'],
+                        tr['time'],);
+                }
+            }
+            dates.forEach(date => this.userWorkoutService.insertWorkout(generatedId, title, date));
+        }
+        else if(name){
             const generatedId = await this.workoutPlanService.insertWorkoutPlan(name);
             for(let i = 0; i < training.length; i++){
                 for (let j = 0; j < training.map(({ series }: any) => series.length)[0]; j++) {

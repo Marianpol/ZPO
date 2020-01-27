@@ -13,11 +13,4 @@ export class AppController {
   async login(@Request() req) {
     return this.authService.login(req.user);
   }
-
 }
-
-// @Get('workoutplan')
-// @Get('workoutplanexample')
-// @Get('workout')
-// @Get('userworkout')
-// @Get('exercises')

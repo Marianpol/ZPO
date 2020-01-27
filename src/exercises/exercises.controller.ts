@@ -18,6 +18,7 @@ export class ExercisesController {
         const generatedId = await this.exercisesService.insertExercise(exerciseName);
         return { id: generatedId };
     }
+    @UseGuards(AuthGuard('jwt'))
     @Get()
     async getAllExercises() {
         const exercises = await this.exercisesService.getExercises();
@@ -37,6 +38,7 @@ export class ExercisesController {
             await this.exercisesService.updateExercise(exerciseId, exerciseName);
             return null;
         }
+    @UseGuards(AuthGuard('jwt'))
     @Delete()
     async removeExercise(@Body('exercises') exercises: any[],){
         await this.exercisesService.deleteExercise(exercises);

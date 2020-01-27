@@ -21,11 +21,20 @@ export class UserService {
         return user;
     }
 
+    async isPropertyInDatabase(property: string, value: string){
+        const user = await this.userModel.find({[property]: value}).exec();
+        if(user.length){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+
     async getUsers(){
         const users = await this.userModel.find().exec();
         return users.map((us) => ({id: us.id, username: us.username, pass: us.password, email: us.email,}));
     }
-
     
     async deleteAll(){
         await this.userModel.collection.drop();
