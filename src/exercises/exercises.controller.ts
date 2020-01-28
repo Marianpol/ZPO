@@ -25,8 +25,8 @@ export class ExercisesController {
         return { id: generatedId };
     }
 
-    @Get(':username')
-    async getExercise(@Param('username') username: string, ) {
+    @Get(':id')
+    async getExercise(@Param('id') username: string, ) {
         const exercises = await this.exercisesService.getExercises(username);
         return exercises;
     }
@@ -41,8 +41,10 @@ export class ExercisesController {
         }
     @UseGuards(AuthGuard('jwt'))
     @Delete()
-    async removeExercise(@Body('exercises') exercises: any[],){
-        await this.exercisesService.deleteExercise(exercises);
+    async removeExercise(@Body('exercises') exercises: any[],
+                         @Body('username') username: string,
+    ){
+        await this.exercisesService.deleteExercise(exercises, username);
         return null;
     }
 }

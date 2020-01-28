@@ -49,8 +49,8 @@ export class ExerciseService {
         updatedExercise.save();
     }
 
-    async deleteExercise(exercises: any[]) {
-        const result = await this.exerciseModel.deleteMany({name: exercises}).exec();
+    async deleteExercise(exercises: any[], username: string) {
+        const result = await this.exerciseModel.deleteMany({name: exercises, username: username}).exec();
         if (result.n === 0){
             throw new NotFoundException('Could not find');
         }
