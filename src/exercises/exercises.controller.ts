@@ -11,23 +11,24 @@ export class ExercisesController {
     async addExercise(
         @Body('name') exerciseName: string,
         @Body('username') username: string,
-    ) {
-        console.log(exerciseName, username);
+    ) { 
         if(exerciseName === "delete"){
             await this.exercisesService.deleteAll();
             return {message: "Deleted"};
         }
-        if(username && exerciseName == ""){
-            const exercises = await this.exercisesService.getExercises(username);
-            return exercises;
-        }
+        // if(username && exerciseName == ""){
+        //     console.log(exerciseName, username, "zobacz");
+        //     const exercises = await this.exercisesService.getExercises(username);
+        //     return exercises;
+        // }
         const generatedId = await this.exercisesService.insertExercise(exerciseName,username);
         return { id: generatedId };
     }
 
-    @Get(':id')
-    getExercise(@Param('id') exerciseId: string, ) {
-        return this.exercisesService.getOneExercise(exerciseId);
+    @Get(':username')
+    async getExercise(@Param('username') username: string, ) {
+        const exercises = await this.exercisesService.getExercises(username);
+        return exercises;
     }
 
     @Patch(':id')
