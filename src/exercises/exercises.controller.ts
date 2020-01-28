@@ -12,11 +12,12 @@ export class ExercisesController {
         @Body('name') exerciseName: string,
         @Body('username') username: string,
     ) {
+        console.log(exerciseName, username);
         if(exerciseName === "delete"){
             await this.exercisesService.deleteAll();
             return {message: "Deleted"};
         }
-        if(username){
+        if(username && exerciseName == ""){
             const exercises = await this.exercisesService.getExercises(username);
             return exercises;
         }
