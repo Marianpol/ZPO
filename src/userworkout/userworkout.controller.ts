@@ -16,15 +16,18 @@ export class WorkoutController {
             await this.workoutService.deleteAll();
             return {message: "Deleted"};
         }
-        if(name === ""){
-            const workouts = await this.workoutService.getAllWorkouts(username);
-            return workouts;
-        }
-        else if(username){
-            const workouts = await this.workoutService.getWorkoutInfo(username);
-            return workouts;
-        }
     }
+    @Get('/dates:id')
+    async getDates(@Param('id') username: string, ){
+        const workouts = await this.workoutService.getAllWorkouts(username);
+        return workouts;
+    }
+    @Get('/info:id')
+    async getInfo(@Param('id') username: string, ){
+        const workouts = await this.workoutService.getWorkoutInfo(username);
+        return workouts;
+    }
+
     @UseGuards(AuthGuard('jwt'))
     @Delete()
     async deleteFromCalendar(@Body('id') id: string,){
