@@ -10,7 +10,6 @@ export class WorkoutController {
     @Post()
     async addUserWorkout(
         @Body('name') name: string,
-        @Body('username') username: string,
     ) { 
         if(name === "delete"){
             await this.workoutService.deleteAll();

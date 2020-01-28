@@ -59,7 +59,7 @@ export class WorkoutPlanController {
             }
         }
         else if(title){
-            dates.forEach(date => this.userWorkoutService.insertWorkout(trainingPlan[0]['id'], username, title, date));
+            dates.forEach(date => this.userWorkoutService.insertWorkout(trainingPlan[0]['id'], title, username, date));
         }
         else if(date){
             let result = [];
