@@ -12,21 +12,21 @@ export class UserWorkoutService {
     async insertWorkout(
         planId: string,
         planName: string,
-        // username: string,
+        username: string,
         workoutDate: Date,
         ){
             const newWorkout = new this.userWorkoutModel({
                 planId,
                 planName,
-                // username,
+                username,
                 workoutDate,
             });
             const result = await newWorkout.save();
             return result.id;
     }
 
-    async getWorkoutInfo(){
-        const workouts = await this.userWorkoutModel.find().exec();
+    async getWorkoutInfo(username: string){
+        const workouts = await this.userWorkoutModel.find({username: username}).exec();
         let dateAndTitle = {};
         let dates = [];
         let mapInfo = {};
@@ -45,13 +45,13 @@ export class UserWorkoutService {
         return mapInfo;
     }
 
-    async getAllWorkouts(){
-        const workouts = await this.userWorkoutModel.find().exec();
+    async getAllWorkouts(username: string){
+        const workouts = await this.userWorkoutModel.find({username: username}).exec();
         return workouts;
     }
 
-    async getWorkoutsByDate(date: Date){
-        const result = this.userWorkoutModel.find({ workoutDate: new Date(date)})
+    async getWorkoutsByDate(date: Date, username: string){
+        const result = this.userWorkoutModel.find({ workoutDate: new Date(date), username: username})
         return result;
     }
     async getWorkoutAllDates(id: string){

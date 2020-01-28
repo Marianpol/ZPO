@@ -9,16 +9,16 @@ export class ExerciseService {
 
     constructor(@InjectModel('Exercise') private readonly exerciseModel: Model<Exercise>){}
 
-    async insertExercise(name: string){
+    async insertExercise(name: string, username: string){
         const newExercise = new this.exerciseModel({
-            name,
+            name, username
         });
         const result = await newExercise.save();
         return result.id;
     }
 
-    async getExercises(){
-        const exercises = await this.exerciseModel.find().exec();
+    async getExercises(username: string){
+        const exercises = await this.exerciseModel.find({username: username}).exec();
         let exArray = [];
         exercises.map((ex) => exArray.push(ex.name));
         return exArray;

@@ -10,21 +10,20 @@ export class WorkoutController {
     @Post()
     async addUserWorkout(
         @Body('name') name: string,
+        @Body('username') username: string,
     ) { 
         if(name === "delete"){
             await this.workoutService.deleteAll();
             return {message: "Deleted"};
         }
         if(name === ""){
-            const workouts = await this.workoutService.getAllWorkouts();
+            const workouts = await this.workoutService.getAllWorkouts(username);
             return workouts;
         }
-    }
-    @UseGuards(AuthGuard('jwt'))
-    @Get()
-    async getWorkouts() {
-        const workouts = await this.workoutService.getWorkoutInfo();
-        return workouts;
+        else if(username){
+            const workouts = await this.workoutService.getWorkoutInfo(username);
+            return workouts;
+        }
     }
     @UseGuards(AuthGuard('jwt'))
     @Delete()

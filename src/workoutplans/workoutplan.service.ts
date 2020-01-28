@@ -12,18 +12,19 @@ export class WorkoutPlanService {
 
     async insertWorkoutPlan(
         name: string,
+        username: string,
         ){
         const newWorkoutPlan = new this.workoutPlanModel({
-            name,
+            name,username,
         });
         const result = await newWorkoutPlan.save();
         return result.id;
     }
 
-    async getWorkoutPlans(){
-        const workoutPlans = await this.workoutPlanModel.find().exec();
-        return workoutPlans.map((wp) => ({id: wp.id, name: wp.name}));
-    }
+    // async getWorkoutPlans(){
+    //     const workoutPlans = await this.workoutPlanModel.find().exec();
+    //     return workoutPlans.map((wp) => ({id: wp.id, name: wp.name}));
+    // }
 
     getWrokoutPlanExercisesNames(workoutPlans: any[]){
         return Array.from(new Set(workoutPlans.map((item: any) => item.exerciseName)));
@@ -47,7 +48,7 @@ export class WorkoutPlanService {
         return theSamePlanCounter;
     }
 
-    async getWorkoutPlansBack(workoutPlansExercises: any[], param = 0, duplicates: {[key: string]: number;} =  {}){
+    async getWorkoutPlansBack(workoutPlansExercises: any[], username, param = 0, duplicates: {[key: string]: number;} =  {}){
         let readyPlan = [];
         let workoutPlans = [];
         if(param){
@@ -63,7 +64,7 @@ export class WorkoutPlanService {
             }
         }
         else{
-            workoutPlans = await this.workoutPlanModel.find().exec();
+            workoutPlans = await this.workoutPlanModel.find({username: username}).exec();
         }
         for(let workoutPlan of workoutPlans){
             let workoutPlanExercises = workoutPlansExercises.filter(item => item["planId"] == workoutPlan._id);

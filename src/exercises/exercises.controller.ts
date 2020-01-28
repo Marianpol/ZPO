@@ -10,19 +10,18 @@ export class ExercisesController {
     @Post()
     async addExercise(
         @Body('name') exerciseName: string,
+        @Body('username') username: string,
     ) {
         if(exerciseName === "delete"){
             await this.exercisesService.deleteAll();
             return {message: "Deleted"};
         }
-        const generatedId = await this.exercisesService.insertExercise(exerciseName);
+        if(username){
+            const exercises = await this.exercisesService.getExercises(username);
+            return exercises;
+        }
+        const generatedId = await this.exercisesService.insertExercise(exerciseName,username);
         return { id: generatedId };
-    }
-    @UseGuards(AuthGuard('jwt'))
-    @Get()
-    async getAllExercises() {
-        const exercises = await this.exercisesService.getExercises();
-        return exercises;
     }
 
     @Get(':id')
