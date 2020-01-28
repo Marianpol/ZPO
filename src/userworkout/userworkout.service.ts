@@ -21,6 +21,10 @@ export class UserWorkoutService {
                 username,
                 workoutDate,
             });
+            console.log(planId,
+                planName,
+                username,
+                workoutDate)
             const result = await newWorkout.save();
             return result.id;
     }

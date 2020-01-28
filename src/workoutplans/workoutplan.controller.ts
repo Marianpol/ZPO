@@ -28,6 +28,7 @@ export class WorkoutPlanController {
         }
 
         if(exampleWorkoutPlan){
+            console.log(username,exampleWorkoutPlan, "gooeeo");
             const generatedId = await this.workoutPlanService.insertWorkoutPlan("Gotowy plan",username);
             for(let i = 0; i < trainingPlan.length; i++){
                 for (let j = 0; j < trainingPlan.map(({ series }: any) => series.length)[0]; j++) {
@@ -41,7 +42,7 @@ export class WorkoutPlanController {
                         tr['time'],);
                 }
             }
-            dates.forEach(date => this.userWorkoutService.insertWorkout(generatedId, username, title, date));
+            dates.forEach(date => this.userWorkoutService.insertWorkout(generatedId, title,username, date));
         }
         else if(name){
             const generatedId = await this.workoutPlanService.insertWorkoutPlan(name, username);
