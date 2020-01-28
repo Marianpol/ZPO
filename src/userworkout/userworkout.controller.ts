@@ -17,12 +17,12 @@ export class WorkoutController {
             return {message: "Deleted"};
         }
     }
-    @Get('/dates:id')
+    @Get('/dates/:id')
     async getDates(@Param('id') username: string, ){
         const workouts = await this.workoutService.getAllWorkouts(username);
         return workouts;
     }
-    @Get('/info:id')
+    @Get('/info/:id')
     async getInfo(@Param('id') username: string, ){
         const workouts = await this.workoutService.getWorkoutInfo(username);
         return workouts;
